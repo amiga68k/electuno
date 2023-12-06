@@ -1,0 +1,28 @@
+{
+    "name": "ElectunoLibrary",
+    "version": "0.1",
+    "keywords": "midi,synth,hammond,organ,electone",
+    "description": "Simulates vintage organ sound",
+    "license": "GPL",
+    "authors":
+    [
+        {
+            "name": "IsRasta",
+            "email": "amiga68k@gmail.com",
+            "url": "https://github.com/Amiga68k",
+            "maintainer": true
+        }
+    ],
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/amiga68k/Electuno.git",
+    },
+    "export":
+    {
+        "include": ["src", "examples"]
+    },
+    "frameworks": "arduino",
+    "platforms": "*",
+    "headers": "electuno.h"
+}

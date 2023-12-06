@@ -1,0 +1,15 @@
+# Syntax Colouring Map For Electuno
+
+# Data types (KEYWORD1)
+OrganSetup	KEYWORD1
+OrganRun	KEYWORD1
+OrganOutput	KEYWORD1
+
+
+# Methods and Functions (KEYWORD2)
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
+
+
