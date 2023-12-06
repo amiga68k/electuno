@@ -15,7 +15,7 @@ Specifications:
 
 It still has a lot of glitches and dirty noises, but it can be fun. 
 
-**I have made it work on arduino Nano, Mega and Due; Although at the moment, i only have uploaded example files for nodeMCU-esp8266 with MCP4921 DAC.**
+**I have made it work on arduino Nano, Mega and Due; Although at the moment, i only have uploaded example files for nodeMCU-esp8266 with MCP4921 DAC and Arduino NANO328 with same DAC.**
 
 **Only tested with Arduino IDE 1.8.19**
 
