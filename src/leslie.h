@@ -193,7 +193,7 @@ void Leslie()
 		int16_t lowfreqSample = (( mainOut + (( tempSample * loCut ) >>3 ))*( 16 - loCut )) >>5;
 		int16_t hifreqSample =  (( mainOut - (( tempSample * hiCut ) >>3 ))*( 8 + hiCut )) >>4;
 
-		for (uint8_t i; i < leslieFilterSize; i++) ///Revisar este for. Creo que no hace falta aquí. Está más abajo.
+		for (uint8_t i; i < leslieFilterSize; i++) 
 		{
 			leslieCounter++;
 			if ( leslieCounter > leslieBufferSize ){ leslieCounter = 0; }
