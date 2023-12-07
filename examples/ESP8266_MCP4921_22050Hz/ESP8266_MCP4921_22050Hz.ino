@@ -1,3 +1,36 @@
+/*
+Default MIDI configuration
+
+Upper keyboard listen on channel 1
+Lower keyboard listen on channel 2
+All controllers on channel 1
+68 = Percusion key ON/OFF
+69 = Percusion harmonic
+71 = Lower vibrato/chorus ON/OFF
+72 = Upper vibrato/chorus ON/OFF
+73 = Leslie OFF/SLOW/FAST
+76 = Reverb
+77 = Overdrive
+79 = Upper drawbar 1
+80 = Upper drawbar 2
+81 = Upper drawbar 3
+82 = Upper drawbar 4
+83 = Upper drawbar 5
+84 = Upper drawbar 6
+85 = Upper drawbar 7
+86 = Upper drawbar 8
+87 = Upper drawbar 9
+88 = Lower drawbar 1
+89 = Lower drawbar 2
+90 = Lower drawbar 3
+91 = Lower drawbar 4
+92 = Lower drawbar 5
+93 = Lower drawbar 6
+94 = Lower drawbar 7
+95 = Lower drawbar 8
+96 = Lower drawbar 9
+*/
+
 #include <ESP8266WiFi.h>
 #include <SPI.h>
 #include <MCP_DAC.h>
