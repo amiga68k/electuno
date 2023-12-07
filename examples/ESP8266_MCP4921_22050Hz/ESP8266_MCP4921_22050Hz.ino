@@ -1,3 +1,5 @@
+// Electuno for ESP8266. 22050HZ
+
 /*
 Default MIDI configuration
 
