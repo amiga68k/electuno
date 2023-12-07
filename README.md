@@ -1,6 +1,11 @@
 # Electuno. Vintage organ simulator
 
-This project tries to simulate the sound of organs from the 60s/70s in small AVRs.
+This project tries to simulate the vintage organs as Electone or Hammond, in small AVRs.
+
+The code still needs a lot of work and organization; But it can be used on esp8266 boards with all the effects activated, two independent keyboards, and a polyphony of 16 simultaneous keys, at a frequency of approximately 22050Hz.
+
+On a simple but effective ATMEL328 you can run two independent keyboards with vibrato/chorus, but the Leslie effect is very heavy.
+Later I will try an Arduino DUE and an ESP32.
 
 Specifications:
 - Sound output through DAC MCP4921 (It is possible to operate it through PWM or other DACs).
