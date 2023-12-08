@@ -1,6 +1,8 @@
-// Electuno for ESP8266. 22050HZ
-
 /*
+Electuno for ESP8266. 22050HZ
+Get chematics and more info here:
+https://github.com/amiga68k/electuno
+
 Default MIDI configuration
 
 Upper keyboard listen on channel 1
