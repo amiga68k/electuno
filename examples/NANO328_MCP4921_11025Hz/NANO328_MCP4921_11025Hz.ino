@@ -1,6 +1,9 @@
-// Electuno for Arduino Nano. 11025HZ
-
 /*
+
+Electuno for Arduino Nano. 11025HZ
+Get chematics and more info here:
+https://github.com/amiga68k/electuno
+
 Default MIDI configuration
 
 Upper keyboard listen on channel 1
