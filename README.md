@@ -61,8 +61,8 @@ I hope little by little to add more example files and configurations (pwm in nan
 
 
 Arduino Nano Scheme
-![Arduino Nano Scheme](extra/electuno_schematics_nano-uno.png)
+![Arduino Nano Scheme](extras/electuno_schematics_nano-uno.png)
 
 NodeMCU esp8266 Scheme
-![NodeMCU esp8266 Schemes](extra/electuno_schematics_nodeMCU.png)
+![NodeMCU esp8266 Schemes](extras/electuno_schematics_nodeMCU.png)
 
