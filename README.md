@@ -2,6 +2,8 @@
 
 This project tries to simulate the vintage organs as Electone or Hammond, in small AVRs.
 
+Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
+
 The code still needs a lot of work and organization; But it can be used on esp8266 boards with all the effects activated, two independent keyboards, and a polyphony of 16 simultaneous keys, at a frequency of approximately 22050Hz.
 
 On a simple but effective ATMEL328 you can run two independent keyboards with vibrato/chorus, but the Leslie effect is very heavy.
