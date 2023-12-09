@@ -26,6 +26,7 @@ It still has a lot of glitches and dirty noises, but it can be fun.
 
 I hope little by little to add more example files and configurations (pwm in nano for example)
 
+
 **Default MIDI configuration**
 
 - Upper keyboard listen on channel 1
