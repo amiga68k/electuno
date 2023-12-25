@@ -1,40 +1,109 @@
 /*
-
-Electuno for Arduino Nano. 11025HZ
-Get chematics and more info here:
+Electuno for Arduino NANO/UNO/MEGA. 11025HZ
+Get schematics and more info here:
 https://github.com/amiga68k/electuno
 
-Default MIDI configuration
+///////////////////////
+//Compilation options//
+///////////////////////
 
-Upper keyboard listen on channel 1
-Lower keyboard listen on channel 2
-All controllers on channel 1
-68 = Percusion key ON/OFF
-69 = Percusion harmonic
-71 = Lower vibrato/chorus ON/OFF
-72 = Upper vibrato/chorus ON/OFF
-73 = Leslie OFF/SLOW/FAST
-76 = Reverb
-77 = Overdrive
-79 = Upper drawbar 1
-80 = Upper drawbar 2
-81 = Upper drawbar 3
-82 = Upper drawbar 4
-83 = Upper drawbar 5
-84 = Upper drawbar 6
-85 = Upper drawbar 7
-86 = Upper drawbar 8
-87 = Upper drawbar 9
-88 = Lower drawbar 1
-89 = Lower drawbar 2
-90 = Lower drawbar 3
-91 = Lower drawbar 4
-92 = Lower drawbar 5
-93 = Lower drawbar 6
-94 = Lower drawbar 7
-95 = Lower drawbar 8
-96 = Lower drawbar 9
+LOWRAM           
+  Forces setting of main variables to 8 bits and select fixed 8 popyphony tonegenerator. Avaiable options:                
+  Disable by default. No value is required, only write:
+  #define LOWRAM
+
+WAVEMIXMODE
+  Affects the volume of the drawbars in certain parts of the keyboard. Avaiable options:
+  0 = All drawbars and tones have same volume.
+  1 = Some tones have atenuation like analog organs. -Default-
+
+FREQTUNE 
+  Used to multiply the base number by which the frequencies of musical notes are generated. Avaiable options:
+  x = Float number. 1 is for 44100Hz output frequency. 2 for 22050Hz... Etc.
+  2 = For a 22050Hz output. -Default- 
+
+VOLUMECONTROL
+  Turns the independent upper/lower/pedal volume control on or off. Avaiable options:
+  0 = Disable. -Default-
+  1 = Enable.
+  2 = Enable with fix for 8 bit microcontrollers as 328P.
+
+EXPRESSIONPEDAL
+  Set up the expression pedal. Avaiable options:
+  0 = Disable. -Default-
+  1 = Enable
+
+WAVESIZE
+  Configures the size in bits of the sine wave and the arrays that contain the mix samples.
+  Theoretically, more is better, but it consumes more memory.Avaiable options:
+  7 = 7 bits wave size ( Only tested from 7 to 12 ). -Default-
+  
+POLYPHONY          
+  Configures the polyphony. Avaiable options:
+  8 = 8 note polyphony of 16(max). -Default- 
+
+UPPERMODE
+  Defines the operation of the upper keyboard. Avaiable options:
+  0 = Disable upper keyboard
+  1 = Enable only flutes, without percusive harmonics -Default- 
+  2 = Enable flutes and percusive keys harmonics
+
+LOWERMODE
+  Defines the operation of the lower keyboard. Avaiable options:
+  0 = Disable lower keyboard. -Default-
+  1 = Enable only fors  four flutes harmonics.
+  2 = Enable all flutes harmonics.
+
+PEDALMODE
+  Defines the operation of the pedal bass keyboard. Avaiable options:
+  0 = Disable bass pedal. -Default-
+  1 = Enable with separated dry audio bus as Yamaha Electone style organs
+  2 = Enable with upper/lower mixed audio bus. Overdrive, reverb and rotary affects in this mode
+
+CHORUS
+Defines the operation of the pedal bass keyboard. Avaiable options:
+  0 = Disable chorus vibrato effect. -Default-
+  1 = Enable with mixed bus for upper/lower
+  2 = Enable with an independent audio bus for each keyboard
+
+CHORUSBUFFERSIZE
+Sets the buffer size for the chorus effect, in bits.
+  ATTENTION: The size of the buffer for this effect directly affects the tuning of the vibrato effect;
+  For this reason there is no real default value, as it depends on the output frequency. Avaiable options:
+  4 = 16 steps vibrato effect. -Default-
+
+REVERB
+  Enable or disable reverb effect. Avaiable options:
+  0 = Disable- -Default-
+  1 = Enable reverb effect.
+
+OVERDRIVE
+  Enable or disable overdrive effect. Avaiable options:
+  0 = Disable. -Default-
+  1 = Enable overdrive effect.
+
+LESLIE 
+  Sets the rotary effect on or off. Avaiable options:
+  0 = Disable. -Default-
+  1 = Enable but only one rotor simulation, same as spinet organs internal rotary speaker.
+  2 = Enable with two bus of audio for drum/horn speakers, try to simulate external leslie cabinets.
+
+LESLIEBUFFERSIZE
+  Sets the buffer size for the rotary effect, in bits.
+  ATTENTION: The size of the buffer for this effect directly affects the tuning of the rotary effect.
+  Avaiable options:
+  7 = 7 bit rotary effect buffer. -Default-
 */
+#define LOWRAM
+#define FREQTUNE 4
+#define UPPERMODE 2
+#define LESLIE 1
+#define LESLIEBUFFERSIZE 7
+
+///////////////////////////
+//End compilation options//
+///////////////////////////
+
 
 #include "SPI.h"
 #define MCP4921_CS_PIN A0
@@ -68,18 +137,13 @@ void MySettings()
   upperDrawbar[5]=0;
   upperDrawbar[6]=0;
   upperDrawbar[7]=0;
-  upperDrawbar[8]=8;
-
-  lowerDrawbar[0]=8;
-  lowerDrawbar[1]=8;
-  lowerDrawbar[2]=8;
-  lowerDrawbar[3]=8;
-  
+  upperDrawbar[8]=8;  
   rotaryValue = 1;
-  // loCut = 8 ; // horn input EQ point
-  // hiCut = 11 ; // drum input EQ point
-  // drumVol = 7 ; // drum input Gain
-  // hornVol = 8 ; // horn input GAin
+  
+  // leslieLowpassFilter = 8 ; // horn input EQ point
+  // leslieHipassFilter = 11 ; // drum input EQ point
+  // leslieDrumVolume = 7 ; // drum input Gain
+  // leslieHornVolume = 8 ; // horn input GAin
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
   // vibratoType = 0; // 0=C1  1=V1
@@ -93,7 +157,6 @@ void MySettings()
   // leslieDrumSpeedFast = 5.9; // Drum fast speed Hz
   // leslieDrumInertia = 2; // simulates weight of horn speaker (needs fix and optimize for correct simulation)
   // leslieDrumMotorTorque = 2; // 
-  finetune = 4; // 1 for 44100Hz
 }
 
 void TimerSetup()
