@@ -1,4 +1,10 @@
-# Electuno 0.12. Vintage organ simulator
+# Electuno 0.1.2. Vintage organ simulator
+
+IMPORTANT:
+This version is continually changing. There may be incomplete or non-working parts at times when I am testing. To use a version without this problem, I recommend installing the library directly from the Arduino IDE library manager.
+You can also download an already generated release:
+https://github.com/amiga68k/electuno/releases
+
 
 This project tries to simulate the vintage organs as Electone or Hammond, in small AVRs.
 
