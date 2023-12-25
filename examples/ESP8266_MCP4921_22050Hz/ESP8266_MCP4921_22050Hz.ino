@@ -159,7 +159,7 @@ void MySettings()
   leslieHipassFilter = 8 ; // drum input EQ point
   leslieDrumPhase = 2 ; // drum input Gain
   //leslieHornPhase = 16 ; // drum input Gain
-  leslieDrumVolume = 0 ; // drum input Gain
+  leslieDrumVolume = 16 ; // drum input Gain
   leslieHornVolume = 16; // horn input GAin
 
 ///////////////////////////
