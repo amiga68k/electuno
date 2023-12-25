@@ -1,7 +1,7 @@
 /*
-File "overdrive.h"
+File "chorustimer.h"
 Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
-Version 0.12
+Version 0.12 
 Copyright 2019-2023 Israel Reyes Rodríguez.
 
 This file is part of Electuno organ simulator library.
@@ -10,20 +10,38 @@ Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARR
 You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 
 File notes:
-	Little changes on 'constrain' output.
+    This is a new file
 	
 Problems:
-	Uggly distortion effect.
-	
+
+
 */
 
-void OverDrive()
-{
-	mainOut =
-		(
-			((mainOut * (32 - overdrive))>>5)
-			+
-			(constrain( ((mainOut * overdrive)>>4), -600 , 600 ))
-		)
-	;
+uint8_t vibrato ; // Shared variable used by Chorus() function
+	
+void ChorusTimer()
+{	
+	static const uint8_t cbs = ( 1 <<CHORUSBUFFERSIZE ) -1 ;
+	static uint16_t chorusPeriod = ( 1000000 / chorusSpeed) / ( 1 <<CHORUSBUFFERSIZE ) ;
+	static uint32_t chorusStartMicros = micros() ;
+	static uint32_t chorusCurrentMicros ;
+	static uint8_t ctc ;	//	Chorus timer counter
+
+	chorusCurrentMicros = micros();
+	if ( chorusCurrentMicros - chorusStartMicros >= chorusPeriod )
+	{
+		chorusStartMicros = chorusCurrentMicros;
+		if ( ctc < cbs )
+		{
+			ctc++ ;
+		}else{
+			ctc = 0 ;
+		}
+		if ( ctc < cbs >>1 )
+		{
+			vibrato = ( ctc >>vibratoType ) + 1 ;
+		}else{
+			vibrato = ( ( cbs - ctc ) >>vibratoType) + 1 ;
+		}
+	}
 }

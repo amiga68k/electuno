@@ -1,4 +1,4 @@
-# Electuno. Vintage organ simulator
+# Electuno 0.12. Vintage organ simulator
 
 This project tries to simulate the vintage organs as Electone or Hammond, in small AVRs.
 

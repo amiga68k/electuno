@@ -1,12 +1,47 @@
 # Syntax Colouring Map For Electuno
 
 # Data types (KEYWORD1)
-OrganSetup	KEYWORD1
-OrganRun	KEYWORD1
-OrganOutput	KEYWORD1
+
+    chorusSpeed	KEYWORD1
+    lowerVibratoSwitch	KEYWORD1
+    upperVibratoSwitch	KEYWORD1
+    vibratoType	KEYWORD1
+    reverb	KEYWORD1
+    overdrive	KEYWORD1
+    leslieDrumVibrato	KEYWORD1
+    leslieHornVibrato	KEYWORD1
+    leslieLowpassFilter	KEYWORD1
+    leslieHipassFilter	KEYWORD1
+    leslieDrumVolume	KEYWORD1
+    leslieHornVolume	KEYWORD1
+    rotaryValue	KEYWORD1
+    leslieHornSpeedSlow	KEYWORD1
+    leslieHornSpeedFast	KEYWORD1
+    leslieHornDeceleration	KEYWORD1
+    leslieHornAcceleration	KEYWORD1
+    leslieDrumSpeedSlow	KEYWORD1
+    leslieDrumSpeedFast	KEYWORD1
+    leslieDrumDeceleration	KEYWORD1
+    leslieDrumAcceleration	KEYWORD1
+    finetune	KEYWORD1
+    expressionPedal	KEYWORD1
+    lowerVolume	KEYWORD1
+    upperVolume	KEYWORD1
+    pedalVolume	KEYWORD1
+    lowerDrawbar	KEYWORD1
+    upperDrawbar	KEYWORD1
+    pedalDrawbar	KEYWORD1
+    percVolume	KEYWORD1
+    percEnable	KEYWORD1
+    percSpeedSlow	KEYWORD1
+    percSpeedFast	KEYWORD1
 
 
 # Methods and Functions (KEYWORD2)
+    OrganSetup	KEYWORD2
+    OrganRun	KEYWORD2
+    OrganOutput	KEYWORD2
+    electuno	KEYWORD2
 
 # Instances (KEYWORD2)
 

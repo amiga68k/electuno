@@ -1,56 +1,40 @@
-// File "electuno.h"
-// Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
-// Version 0.1
-// Copyright 2019-2023 Israel Reyes Rodríguez.
+/*
+File "electuno.h"
+Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
+Version 0.12 
+Copyright 2019-2023 Israel Reyes Rodríguez.
 
-// This file is part of Electuno organ simulator library.
-// Electuno is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-// Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
+This file is part of Electuno organ simulator library.
+Electuno is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 
-//  Version notes:
-//    This is a first public version (and my first library).
+File notes:
+	The variables have been moved to a new file: varsetup.h.
+	Some changes in OrganSetup() and OrganOutput().	
 
-//  file notes:
-//
+Problems:
 
+*/
 
+#ifndef WAVEMIXMODE
+	#define WAVEMIXMODE 1
+#endif
+  
+#ifndef FREQTUNE
+	#define FREQTUNE 2
+#endif
 
+#ifndef VOLUMECONTROL
+	#define VOLUMECONTROL 0
+#endif
 
-//uint8_t h1,h2,h3,h4;
-// control variables
-// chorus vibrato
-double chorusSpeed = 6.86;
-bool lowerVibratoSwitch;
-bool upperVibratoSwitch;
-bool vibratoType = 0;
-// reverb
-uint8_t reverb = 0;
-// overdrive
-uint8_t overdrive;
-// leslie vars
-uint8_t leslieDrumVib = 16;
-uint8_t leslieHornVib = 16;
-uint8_t loCut = 8 ; // horn input EQ point
-uint8_t	hiCut = 8 ; // drum input EQ point
-uint8_t	drumVol = 16 ; // drum input Gain
-uint8_t	hornVol = 16 ; // horn input GAin
-uint8_t rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast
-// Horn related vars
-float leslieHornSpeedSlow = 0.515; // slow speed Hz
-float leslieHornSpeedFast = 7.1; // fast speed Hz
-float leslieHornDeceleration = 1; // simulates weight of horn speaker
-float leslieHornAcceleration = 15; // for speedup acceleration
-// Drum related vars
-float leslieDrumSpeedSlow = 0.66; // slow speed Hz
-float leslieDrumSpeedFast = 6.00; // fast speed Hz
-float leslieDrumDeceleration = 0; // simulates weight of horn speaker
-float leslieDrumAcceleration = 1; // for speedup acceleration
+#ifndef EXPRESSIONPEDAL
+	#define EXPRESSIONPEDAL 0
+#endif
 
-//set default parameters if not set
-// Wave
 #ifndef WAVESIZE
-	#define WAVESIZE 8
+	#define WAVESIZE 7
 #endif
 
 #ifndef POLYPHONY
@@ -65,21 +49,24 @@ float leslieDrumAcceleration = 1; // for speedup acceleration
 	#define UPPERMODE 1
 #endif
 
-//Effects
+#ifndef PEDALMODE
+	#define PEDALMODE 0
+#endif
+
 #ifndef CHORUS
 	#define CHORUS 0
 #endif
 
 #ifndef CHORUSBUFFERSIZE
-	#define CHORUSBUFFERSIZE 5
+	#define CHORUSBUFFERSIZE 4
 #endif
 
 #ifndef REVERB
 	#define REVERB 0
 #endif
 
-#ifndef REVERBBUFFER
-	#define REVERBBUFFER 8192
+#ifndef REVERBBUFFERSIZE
+	#define REVERBBUFFERSIZE 13
 #endif
 
 #ifndef OVERDRIVE
@@ -87,87 +74,89 @@ float leslieDrumAcceleration = 1; // for speedup acceleration
 #endif
 
 #ifndef LESLIE
-	#define LESLIE 1
-#endif
-
-#ifndef LESLIEEQBUFFERSIZE
-	#define LESLIEEQBUFFERSIZE 3 //in bits
-#endif
-
-#ifndef LESLIEFILTERSIZE
-	#define LESLIEFILTERSIZE 3 //in bits
+	#define LESLIE 0
 #endif
 
 #ifndef LESLIEBUFFERSIZE
-	#define LESLIEBUFFERSIZE 8 // in bits
+	#define LESLIEBUFFERSIZE 7 // in bits
 #endif
 
-//Create variables based on user parameters
-#if LOWERMODE == 1
-	uint8_t lowerDrawbar[4];
-	#elif LOWERMODE == 2
-		uint8_t lowerDrawbar[9];
-#endif
-
-#if UPPERMODE == 1
-	uint8_t upperDrawbar[9];
-	bool enableDrawbar8=1;
-	#elif UPPERMODE == 2
-		bool enableDrawbar8=1;
-		uint8_t upperDrawbar[9];
-		// Percusive key related variables
-		int16_t perc;
-		uint8_t percCounter;
-		byte percVolume;
-		bool percEnable;
-		byte harmonic[2] = {4, 6};
-		byte percType = harmonic[0];
-		// Decay time (in seconds)
-		const float percSpeedSlow = 1.0;
-		const float percSpeedFast = 0.4;
-		uint16_t percSpeed[2] = {
-			(1000000*percSpeedSlow)/300,
-			(1000000*percSpeedFast)/300
-		};
-		uint16_t percPeriod = percSpeed[0];
-		uint32_t percStartMicros = micros();
-		uint32_t percCurrentMicros = micros();
-
-#endif
-
+#include "varsetup.h"
+#include "control.h"
 #include "wavegenerator.h"
 #include "tonegenerator.h"
-#include "control.h"
 
 #if CHORUS > 0
+	#include "chorustimer.h"
 	#include "chorus.h"
+#else
+	void ChorusTimer(){};
+	void Chorus(){};
 #endif
 
 #if REVERB > 0
 	#include "reverb.h"
+#else
+	void Reverb(){};
 #endif
 
 #if OVERDRIVE > 0
 	#include "overdrive.h"
+#else
+	void OverDrive(){};
 #endif
 
 #if LESLIE > 0
-	#include "leslie.h"
+	#include "leslietimer.h"
+	#include "leslie.h"	
+#else
+	void LeslieTimer(){};
+	void Leslie(){};
+#endif
+
+#if EXPRESSIONPEDAL == 1	// Working with Esp8266 but not work on arduino Mega/Nano
+	void ExpressionPedal()
+	{
+		mainOut = ( mainOut * expressionPedal) >> 7 ;
+	}
+#elif EXPRESSIONPEDAL == 2	// Working for all, but has bad quality output. This is a FIX for 8 bit AVRs
+	void ExpressionPedal()
+	{
+		mainOut = ( mainOut >> 7 ) * expressionPedal ;
+	}
+#else
+	void ExpressionPedal(){};
+#endif
+
+#if VOLUMECONTROL > 0
+	void VolumeControl()
+	{
+		upperOut = ( upperOut * upperVolume ) >> 7;
+		lowerOut = ( lowerOut * lowerVolume ) >> 7;
+		pedalOut = ( pedalOut * pedalVolume ) >> 7;
+	}
+#else
+	void VolumeControl(){};
 #endif
 
 
-void WaveSetup()
-{
-	int16_t s = ((sizeof(sine) / sizeof(sine[0]))-1)>>1;
-	for ( int i = 0 ; i < s ; i++)
+#if PEDALMODE == 2
+	void BassOutMixed()
 	{
-		sine[i] = (sin(i * PI / s )) * s;
-	}
-	for ( int i = 0 ; i < s ; i++)
+		mainOut += pedalOut ;
+	};
+	void BassOutClean(){};
+#elif PEDALMODE == 1
+	void BassOutMixed(){};
+	void BassOutClean()
 	{
-		sine[i + s ] = (sin(i * PI / s )) * -s;
-	}
-}
+		mainOut += pedalOut ;
+	};
+#elif PEDALMODE == 0
+	void BassOutMixed(){};
+	void BassOutClean(){};
+#endif
+
 
 void OrganSetup()
 {
@@ -175,33 +164,24 @@ void OrganSetup()
 }
 
 void OrganRun()
-{
+{	
+	ChorusTimer();
+	LeslieTimer();
 	WaveMix();
-
 }
 
 int OrganOutput()
 {
+	LeslieTimer();
 	ToneGenerator();
+	VolumeControl();
+	Chorus();
+	BassOutMixed();
+	ExpressionPedal();
+	OverDrive();
+	Reverb();
+	Leslie();
+	BassOutClean();
 
-	#if CHORUS > 0
-		Chorus();
-	#endif
-
-	#if OVERDRIVE > 0
-		OverDrive();
-	#endif
-
-	#if REVERB > 0
-		Reverb();
-	#endif
-
-	#if LESLIE > 0
-		if ( rotaryValue > 0 )
-		{
-			Leslie();
-		}
-	#endif
-
-	return int16_t(mainOut);
+	return int16_t( mainOut );
 }

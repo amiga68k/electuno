@@ -1,44 +1,76 @@
-// File "electuno.h"
-// Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
-// Version 0.1 
-// Copyright 2019-2023 Israel Reyes Rodríguez.
+/*
+File "tonegenerator.h"
+Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
+Version 0.12 
+Copyright 2019-2023 Israel Reyes Rodríguez.
 
-// This file is part of Electuno organ simulator library.
-// Electuno is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-// Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
+This file is part of Electuno organ simulator library.
+Electuno is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 
-//  Version notes:
-//    This is a first public version (and my first library). 
+File notes:
+	'For' has been replaced by 'do-while' loop. I've noticed that 8-bit AVRs handle it faster. 
+	Changed 'if-else' to 'switch-case' for test.
+	Added pedal tone generator.
+	Added volume controls for all parts ( lower, upper, pedal ).
+	
+Problems:
+	Little noise when key change state.
 
-// file notes:
+*/
 
-// Note frequency and polyphony variables.
+#ifndef LOWRAM
 
-//uint8_t keyPressed;
-float finetune	= 1;
-uint8_t freeChannel = 0;
-int16_t mainOut;
-int16_t lowerOut;
-int16_t upperOut;
-uint16_t channelFreq[POLYPHONY];
-uint16_t oscillators[POLYPHONY];
-
-void ToneGenerator()
-{
-	mainOut = 0;
-	lowerOut = 0;
-	upperOut = 0;
-
-	for ( uint8_t i = 0 ; i < POLYPHONY ; i++ )
+	void ToneGenerator()
 	{
-		oscillators[i] += channelFreq[i];
-		if (waveNumber[i] >= 3)
+		const uint8_t w = 16 - WAVESIZE ;
+		mainOut = lowerOut = upperOut = pedalOut= 0;	
+		uint8_t i;
+		do
 		{
-			lowerOut += (wave[waveNumber[i]][oscillators[i] >> waveDivider] >> 4 );
-		}else{
-			upperOut += (wave[waveNumber[i]][oscillators[i] >> waveDivider] >> 4 );
-		}
-		mainOut = lowerOut + upperOut;
+			oscillators[i] += channelFreq[i];
+			switch (audioChannel[i])
+			{
+				case 1:
+					upperOut += wave[waveNumber[i]][oscillators[i] >> w];
+					break;
+				case 2:
+					lowerOut += wave[waveNumber[i]][oscillators[i] >> w];
+					break;
+				case 3:
+					pedalOut += wave[waveNumber[i]][oscillators[i] >> w];
+					break;
+			}
+			i++ ;		
+		} while (i < POLYPHONY);
+		mainOut = lowerOut + upperOut ;
 	}
-}
+
+#else
+
+	void ToneGenerator()
+	{
+		static const uint8_t w = 16 - WAVESIZE ;
+
+		oscillators[0] += channelFreq[0];
+		oscillators[1] += channelFreq[1];
+		oscillators[2] += channelFreq[2];
+		oscillators[3] += channelFreq[3];
+		oscillators[4] += channelFreq[4];
+		oscillators[5] += channelFreq[5];
+		oscillators[6] += channelFreq[6];
+		oscillators[7] += channelFreq[7];
+
+	mainOut =
+		wave[waveNumber[0]][oscillators[0] >> w] +
+		wave[waveNumber[1]][oscillators[1] >> w] +
+		wave[waveNumber[2]][oscillators[2] >> w] +
+		wave[waveNumber[3]][oscillators[3] >> w] +
+		wave[waveNumber[4]][oscillators[4] >> w] +
+		wave[waveNumber[5]][oscillators[5] >> w] +
+		wave[waveNumber[6]][oscillators[6] >> w] +
+		wave[waveNumber[7]][oscillators[7] >> w] 
+		;
+	}
+#endif
