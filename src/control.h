@@ -34,8 +34,8 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 	// RESERVED case 53:	
 				case 54: overdrive  =      			map(rvalue2,  0,127,  0, 32); break;
 				case 55: rotaryValue =          	map(rvalue2,  0,127,  0,  2); break;
-				case 56: leslieHornVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
-				case 57: leslieDrumVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
+				case 56: leslieDrumVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
+				case 57: leslieHornVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
 				case 58: leslieLowpassFilter  =     map(rvalue2,  0,127,  0, 16); break;
 				case 59: leslieHipassFilter  =      map(rvalue2,  0,127,  0, 16); break;
 				case 60: leslieDrumVolume  =      	map(rvalue2,  0,127,  0, 16); break;
