@@ -12,6 +12,8 @@
     leslieHornVibrato	KEYWORD1
     leslieLowpassFilter	KEYWORD1
     leslieHipassFilter	KEYWORD1
+    leslieDrumPhase	KEYWORD1
+    leslieHornPhase	KEYWORD1
     leslieDrumVolume	KEYWORD1
     leslieHornVolume	KEYWORD1
     rotaryValue	KEYWORD1
