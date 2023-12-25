@@ -11,6 +11,7 @@ You should have received a copy of the GNU General Public License along with Foo
 
 File notes:
 	Rewrite two Leslie() function. Remove for/do/while loops for better performance.
+	New phase tremolo effect when LESLIE option is 2 ( #defile LESLIE 2 )
 
 Problems:
 
