@@ -94,7 +94,6 @@ LESLIEBUFFERSIZE
   Avaiable options:
   7 = 7 bit rotary effect buffer. -Default-
 */
-#define FORCE8BIT 0
 #define VOLUMECONTROL 1
 #define EXPRESSIONPEDAL 1
 #define WAVESIZE 10
@@ -167,10 +166,10 @@ void MySettings()
 //User on boot parameters//
 ///////////////////////////
 
-  leslieHornDeceleration = 127;
-  leslieHornAcceleration = 127;
-  leslieDrumDeceleration = 1;
-  leslieDrumAcceleration = 2;  
+  // leslieHornDeceleration = 127;
+  // leslieHornAcceleration = 127;
+  // leslieDrumDeceleration = 1;
+  // leslieDrumAcceleration = 2;  
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
   // vibratoType = 0; // 0=C1  1=V1
