@@ -14,7 +14,7 @@ File notes:
 	Some changes in OrganSetup() and OrganOutput().	
 
 Problems:
-
+#define 
 */
 
 #ifndef WAVEMIXMODE
@@ -150,7 +150,7 @@ Problems:
 	void BassOutMixed(){};
 	void BassOutClean()
 	{
-		mainOut += pedalOut ;
+		mainOut += pedalOut << 1 ;
 	};
 #elif PEDALMODE == 0
 	void BassOutMixed(){};
@@ -170,7 +170,7 @@ void OrganRun()
 	WaveMix();
 }
 
-int OrganOutput()
+int16_t OrganOutput()
 {
 	LeslieTimer();
 	ToneGenerator();
@@ -180,7 +180,7 @@ int OrganOutput()
 	ExpressionPedal();
 	OverDrive();
 	Reverb();
-	Leslie();
+	Leslie();	
 	BassOutClean();
 
 	return int16_t( mainOut );

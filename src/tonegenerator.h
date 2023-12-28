@@ -14,6 +14,7 @@ File notes:
 	Changed 'if-else' to 'switch-case' for test.
 	Added pedal tone generator.
 	Added volume controls for all parts ( lower, upper, pedal ).
+	Fix variables for Arduino Due compatibility (Arduino Due cannot reset variables as 'uint8_t i;'. Correct mode is 'uint8_t i = 0;' )
 	
 Problems:
 	Little noise when key change state.
@@ -24,11 +25,12 @@ Problems:
 
 	void ToneGenerator()
 	{
-		const uint8_t w = 16 - WAVESIZE ;
+		static const uint8_t w = 16 - WAVESIZE ;
 		mainOut = lowerOut = upperOut = pedalOut= 0;	
-		uint8_t i;
+		uint8_t i = 0;
+
 		do
-		{
+		{	
 			oscillators[i] += channelFreq[i];
 			switch (audioChannel[i])
 			{
@@ -44,6 +46,8 @@ Problems:
 			}
 			i++ ;		
 		} while (i < POLYPHONY);
+
+			
 		mainOut = lowerOut + upperOut ;
 	}
 

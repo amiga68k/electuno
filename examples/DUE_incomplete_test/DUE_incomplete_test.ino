@@ -1,6 +1,11 @@
 /*
-Electuno for ESP8266. 22050HZ
+Electuno for Arduino Due (testing)
+
+MIDI OUT -> RX1 Pin
+AUDIO    -> DAC0 Pin
+
 Get schematics and more info here:
+( For Due coming soon )
 https://github.com/amiga68k/electuno
 
 ///////////////////////
@@ -94,32 +99,29 @@ LESLIEBUFFERSIZE
   Avaiable options:
   7 = 7 bit rotary effect buffer. -Default-
 */
-//#define LOWRAM
-#define WAVEMIXMODE 1
+
 #define FREQTUNE 2
 #define VOLUMECONTROL 0
 #define EXPRESSIONPEDAL 1
-//#define CHORUS 1
-//#define REVERB 1
-//#define OVERDRIVE 1
+#define CHORUS 1
+//#define REVERB 1 // untested
+//#define OVERDRIVE 1 // untested
 #define WAVESIZE 10
-//#define POLYPHONY  11
+#define POLYPHONY  11
 #define UPPERMODE 2
 #define LOWERMODE 2
 #define PEDALMODE 1
 #define LESLIE 2
-#define LESLIEBUFFERSIZE 9
+#define LESLIEBUFFERSIZE 8
 
 ///////////////////////////
 //End compilation options//
 ///////////////////////////
 
-#include <ESP8266WiFi.h>
-#include <SPI.h>
-#include <MCP_DAC.h>
-#include <MIDI.h>
-MCP4911 MCP;
-MIDI_CREATE_DEFAULT_INSTANCE();
+#include <DueTimer.h> // Get from official library manager or download here: https://github.com/ivanseidel/DueTimer
+#include <MIDI.h> // Get from official library manager or download here: https://github.com/FortySevenEffects/arduino_midi_library
+//MIDI_CREATE_DEFAULT_INSTANCE();
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 #include <electuno.h>
 
 void MySettings()
@@ -128,18 +130,18 @@ void MySettings()
 //User/midi realtime parameters//
 /////////////////////////////////
 
-  upperDrawbar[0]=0;
-  upperDrawbar[1]=0;
-  upperDrawbar[2]=0;
-  upperDrawbar[3]=0;
-  upperDrawbar[4]=0;
-  upperDrawbar[5]=0;
+  upperDrawbar[0]=8;
+  upperDrawbar[1]=8;
+  upperDrawbar[2]=8;
+  upperDrawbar[3]=8;
+  upperDrawbar[4]=8;
+  upperDrawbar[5]=8;
   upperDrawbar[6]=8;
   upperDrawbar[7]=8;
   upperDrawbar[8]=8;
   
-  lowerDrawbar[0]=8;
-  lowerDrawbar[1]=8;
+  lowerDrawbar[0]=0;
+  lowerDrawbar[1]=0;
   lowerDrawbar[2]=8;
   lowerDrawbar[3]=8;
   lowerDrawbar[4]=0;
@@ -159,23 +161,23 @@ void MySettings()
   pedalDrawbar[8]=0;  
 
   rotaryValue = 0;
-  leslieDrumVibrato = 8;
-  leslieHornVibrato = 8;
+  leslieDrumVibrato = 16;
+  leslieHornVibrato = 16;
   leslieLowpassFilter = 0 ;
-  leslieHipassFilter = 14 ; 
+  leslieHipassFilter = 13 ; 
   leslieDrumPhase = 0 ; 
   leslieHornPhase = 0; 
-  leslieDrumVolume = 0 ; 
-  leslieHornVolume = 20; 
+  leslieDrumVolume = 16 ; 
+  leslieHornVolume = 16; 
 
 ///////////////////////////
 //User on boot parameters//
 ///////////////////////////
 
-   leslieHornDeceleration = 200;
-   leslieHornAcceleration = 255;
-   leslieDrumDeceleration = 1;
-   leslieDrumAcceleration = 16;  
+  // leslieHornDeceleration = 200;
+  // leslieHornAcceleration = 255;
+  // leslieDrumDeceleration = 1;
+  // leslieDrumAcceleration = 16;  
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
   // vibratoType = 0; // 0=C1  1=V1
@@ -187,25 +189,16 @@ void MySettings()
 }
 
 void setup() {
-  WiFi.mode(WIFI_OFF);
   MySettings();
-  MidiSetup();  
   OrganSetup();
+  MidiSetup();  
   DAC_setup();
-  Esp8266TimerSetup();
+  TimerSetup();  
 }
-void ICACHE_RAM_ATTR onTimerISR()
-{ 
-  MCP.fastWriteA(( OrganOutput() >> 3 ) + 2047 ) ;
-}
-void Esp8266TimerSetup()
-{    
-    timer1_attachInterrupt(onTimerISR);
-    timer1_enable(TIM_DIV1, TIM_EDGE, TIM_LOOP);
-    //timer1_write(7254); //11025Hz
-    timer1_write(3627); //22050Hz
-    //timer1_write(1811); //44100Hz
 
+void TimerSetup()
+{  
+  Timer3.attachInterrupt(OutputTimer).setFrequency(22050).start();
 }
 
 void MidiSetup()
@@ -220,12 +213,19 @@ void MidiSetup()
 
 void DAC_setup()
 {
-  MCP.begin(15);
-  MCP.fastWriteA(0); 
+  analogWriteResolution(12);
+  pinMode(DAC0, OUTPUT);
 }
 
 void loop()
 {
   MIDI.read();
   OrganRun();
+}
+
+void OutputTimer()
+{
+  int16_t aOut = ( OrganOutput() >> 3 ) +2048 ;
+  analogWrite(DAC0, aOut ) ;
+
 }

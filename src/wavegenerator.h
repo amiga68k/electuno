@@ -112,7 +112,6 @@ rather tones were repeated in the last octaves to compensate for this.
 			((sine[wavemixCounter << 3 & wl ] * upperDrawbar[8]*enableDrawbar8)>>wm)
 			>>ws
 		;
-
 		wave[2][wavemixCounter] =
 			#if UPPERMODE == 2
 				perc +
@@ -156,12 +155,12 @@ rather tones were repeated in the last octaves to compensate for this.
 			>>ws
 		;
 		wave[4][wavemixCounter] =
-			(sine[wavemixCounter]            * lowerDrawbar[0] << wm ) +
-			(sine[wavemixCounter  * 3 & wl ] * lowerDrawbar[1] << wm ) +
+			(sine[wavemixCounter]            * lowerDrawbar[0]) +
+			(sine[wavemixCounter  * 3 & wl ] * lowerDrawbar[1]) +
 			(sine[wavemixCounter << 1 & wl ] * lowerDrawbar[2]) +
 			(sine[wavemixCounter << 2 & wl ] * lowerDrawbar[3]) +
 			(sine[wavemixCounter  * 6 & wl ] * lowerDrawbar[4]) +
-			(sine[wavemixCounter << 3 & wl ] * lowerDrawbar[5]) +
+			(sine[wavemixCounter << 3 & wl ] * lowerDrawbar[5] >> wm) +
 			(sine[wavemixCounter * 10 & wl ] * lowerDrawbar[6] >> wm ) +
 			(sine[wavemixCounter  * 6 & wl ] * lowerDrawbar[7] >> wm ) +
 			(sine[wavemixCounter << 3 & wl ] * lowerDrawbar[8] >> wm )

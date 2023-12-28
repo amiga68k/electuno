@@ -14,7 +14,6 @@ File notes:
 
 Problems:
 */
-
 #ifndef LOWRAM
 	//	Wave generator variables
 	const uint8_t waveMode = 0 ; 
@@ -27,7 +26,7 @@ Problems:
 	int16_t lowerWave2[waveLength];
 	int16_t lowerWave3[waveLength];
 	int16_t pedalWave[waveLength];
-	int16_t* wave[7] = {upperWave1, upperWave2, upperWave3, lowerWave1, lowerWave2, lowerWave3, pedalWave};
+	int16_t* wave[7] = {upperWave1, upperWave2, upperWave3, lowerWave1, lowerWave2, lowerWave3, pedalWave};	
 	int16_t perc;
 	uint8_t percCounter;
 	uint8_t percVolume;
@@ -84,8 +83,8 @@ Problems:
 	uint8_t leslieHornPhase = 10;	// horn phase 
 	uint8_t	leslieHornVolume = 16 ; // horn output volume
 	uint8_t leslieHornVibrato = 10;	// horn vibrato 
-	float leslieHornSpeedSlow = 0.515; // horn slow speed Hz
-	float leslieHornSpeedFast = 7.2; // horn fast speed Hz
+	float leslieHornSpeedSlow = 0.665; // horn slow speed Hz
+	float leslieHornSpeedFast = 7.05; // horn fast speed Hz
 	uint8_t leslieHornDeceleration = 127; // simulates weight of horn speaker
 	uint8_t leslieHornAcceleration = 127; // for speedup acceleration
 	uint8_t leslieLowpassFilter = 8 ; // drum lowpass filter

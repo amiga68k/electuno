@@ -11,10 +11,13 @@ You should have received a copy of the GNU General Public License along with Foo
 
 File notes:
     This is a new file
-	FIXED:Acceleration has a bug when the buffer size changes
+	FIXED:Acceleration was a bug when the buffer size changes
+	FIXED:The RPM calculation was wrong.
 
 Problems:
-
+	Arduino Due:
+		The time calculation fails with Arduino Due: Depending on how many keys I have pressed, the speed of the Leslie simulation changes a little.
+		It doesn't matter if there are more or fewer keys, it's something random, it doesn't seem like a lack of power.
 
 */
 
@@ -28,8 +31,8 @@ void LeslieTimer(){
 		static uint16_t rotaryStimatedDrumSpeed[3] =
 		{
 			65535,
-			(1000000/leslieDrumSpeedSlow)/(leslieTimerSize),
-			(1000000/leslieDrumSpeedFast)/(leslieTimerSize)
+			(1000000/leslieDrumSpeedSlow)/(leslieBufferSize),
+			(1000000/leslieDrumSpeedFast)/(leslieBufferSize)
 		};
 		static uint32_t leslieDrumStartMicros = micros();
 		static uint32_t rotaryDrumSpeed  = rotaryStimatedDrumSpeed[1];
@@ -49,20 +52,21 @@ void LeslieTimer(){
 				if (RotaryDrumStep < leslieTimerSize>>1){
 					drumChorus1 = ((1+RotaryDrumStep)*leslieDrumVibrato)>>4;
 				}else{
-					drumChorus1 = ((1+leslieTimerSize-RotaryDrumStep)*leslieDrumVibrato)>>4;
+					drumChorus1 = (( leslieTimerSize - RotaryDrumStep ) * leslieDrumVibrato ) >> 4 ;
 				}
-				drumChorus2 = 1+(drumChorus1>>1);
+				drumChorus2 = ( LESLIEBUFFERSIZE >> 1 ) + ( drumChorus1 >> 1 ) ;
+				drumChorus1 = ( LESLIEBUFFERSIZE >> 1 ) + drumChorus1 ;
 			}
 			leslieDrumStartMicros = leslieDrumCurrentMicros;
 		}
 
 // Drum acceleration timer
 
-		static uint32_t leslieDrumInertiaPeriod = 120;
-		static uint32_t leslieDrumInertiaStartMillis = millis();
-		static uint32_t leslieDrumInertiaCurrentMillis;
+		static uint32_t leslieDrumInertiaPeriod = 120 ;
+		static uint32_t leslieDrumInertiaStartMillis = millis() ;
+		static uint32_t leslieDrumInertiaCurrentMillis ;
 
-		leslieDrumInertiaCurrentMillis = millis();
+		leslieDrumInertiaCurrentMillis = millis() ;
 		if ( leslieDrumInertiaCurrentMillis - leslieDrumInertiaStartMillis >= leslieDrumInertiaPeriod )
 		{
 			switch (rotaryValue)
@@ -98,8 +102,8 @@ void LeslieTimer(){
 // Leslie horn timer
 		static uint16_t rotaryStimatedHornSpeed[3] =
 			{ 65535,
-				(1000000/leslieHornSpeedSlow)/(leslieTimerSize),
-				(1000000/leslieHornSpeedFast)/(leslieTimerSize)
+				(1000000/leslieHornSpeedSlow)/(leslieBufferSize),
+				(1000000/leslieHornSpeedFast)/(leslieBufferSize)
 			};
 		static uint32_t leslieHornStartMicros = micros();
 		static uint32_t rotaryHornSpeed  = rotaryStimatedHornSpeed[1];
@@ -117,21 +121,22 @@ void LeslieTimer(){
 					RotaryHornStep = 0;
 				}
 				if (RotaryHornStep < leslieTimerSize>>1){
-					hornChorus1 = ((1+RotaryHornStep)*leslieHornVibrato)>>4;
+					hornChorus1 = (( RotaryHornStep ) * leslieHornVibrato ) >> 4 ;
 				}else{
-					hornChorus1 = ((1+leslieTimerSize-RotaryHornStep)*leslieHornVibrato)>>4;
+					hornChorus1 = (( leslieTimerSize - RotaryHornStep ) * leslieHornVibrato ) >> 4 ;
 				}
-				hornChorus2 = 1+(hornChorus1>>1);
+				hornChorus2 = ( LESLIEBUFFERSIZE >> 1 ) + ( hornChorus1 >> 1 ) ;
+				hornChorus1 = ( LESLIEBUFFERSIZE >> 1 ) + hornChorus1 ;
 			}
 			leslieHornStartMicros = leslieHornCurrentMicros;
 		}
 
 // Horn acceleration timer
 		static uint32_t leslieHornInertiaPeriod = 100 ;
-		static uint32_t leslieHornInertiaStartMillis = millis();
-		static uint32_t leslieHornInertiaCurrentMillis;
+		static uint32_t leslieHornInertiaStartMillis = millis() ;
+		static uint32_t leslieHornInertiaCurrentMillis ;
 
-		leslieHornInertiaCurrentMillis = millis();
+		leslieHornInertiaCurrentMillis = millis() ;
 		if ( leslieHornInertiaCurrentMillis - leslieHornInertiaStartMillis >= leslieHornInertiaPeriod )
 		{
 			switch (rotaryValue)

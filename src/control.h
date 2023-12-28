@@ -76,6 +76,7 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 76: lowerDrawbar[6] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 77: lowerDrawbar[7] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 78: lowerDrawbar[8] =      	map(rvalue2,  0,127,  0,  8); break;
+				*/
 			}
 		break;
 		case 3:
