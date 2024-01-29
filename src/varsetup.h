@@ -16,6 +16,7 @@ Problems:
 */
 #ifndef LOWRAM
 	//	Wave generator variables
+	uint32_t Micros;
 	const uint8_t waveMode = 0 ; 
 	const int16_t waveLength = (1 << WAVESIZE) ;
 	int16_t sine[1 << WAVESIZE];
@@ -81,14 +82,14 @@ Problems:
 	uint8_t rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast
 	uint8_t	leslieHipassFilter = 8 ; // horn hipass filter
 	uint8_t leslieHornPhase = 10;	// horn phase 
-	uint8_t	leslieHornVolume = 16 ; // horn output volume
+	uint8_t	leslieHornMicVolume = 16 ; // horn output volume
 	uint8_t leslieHornVibrato = 10;	// horn vibrato 
 	float leslieHornSpeedSlow = 0.665; // horn slow speed Hz
 	float leslieHornSpeedFast = 7.05; // horn fast speed Hz
 	uint8_t leslieHornDeceleration = 127; // simulates weight of horn speaker
 	uint8_t leslieHornAcceleration = 127; // for speedup acceleration
 	uint8_t leslieLowpassFilter = 8 ; // drum lowpass filter
-	uint8_t	leslieDrumVolume = 16 ; // drum output volume
+	uint8_t	leslieDrumMicVolume = 16 ; // drum output volume
 	uint8_t leslieDrumPhase = 10;	// horn Phase 
 	uint8_t leslieDrumVibrato = 10; // drum vibrato
 	float leslieDrumSpeedSlow = 0.66; // drum slow speed Hz
@@ -99,17 +100,15 @@ Problems:
 #else
 	//TEST FOR 8 BIT
 	//	Wave generator variables
-	const uint8_t waveMode = 6 ; 
+	uint32_t Micros;
+	const uint8_t waveMode = 8 ; 
 	const int16_t waveLength = (1 << WAVESIZE) ;
 	int16_t sine[1 << WAVESIZE];
 	int8_t upperWave1[waveLength];
 	int8_t upperWave2[waveLength];
 	int8_t upperWave3[waveLength];
 	int8_t lowerWave1[waveLength];
-	int8_t lowerWave2[waveLength];
-	int8_t lowerWave3[waveLength];
-	int8_t pedalWave[waveLength];
-	int8_t* wave[7] = {upperWave1, upperWave2, upperWave3, lowerWave1, lowerWave2, lowerWave3, pedalWave};
+	int8_t* wave[4] = {upperWave1, upperWave2, upperWave3,lowerWave1};
 	int8_t perc;
 	uint8_t percCounter;
 	uint8_t percVolume;
@@ -146,7 +145,7 @@ Problems:
 
 	//	Effects and volume variables
 
-	int8_t mainOut;
+	int16_t mainOut;
 	int8_t lowerOut;
 	int8_t upperOut;
 	int8_t pedalOut;
@@ -164,14 +163,14 @@ Problems:
 	uint8_t rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast
 	uint8_t	leslieHipassFilter = 8 ; // horn hipass filter
 	uint8_t leslieHornPhase = 10;	// horn phase 
-	uint8_t	leslieHornVolume = 16 ; // horn output volume
+	uint8_t	leslieHornMicVolume = 16 ; // horn output volume
 	uint8_t leslieHornVibrato = 10;	// horn vibrato 
-	float leslieHornSpeedSlow = 0.515; // horn slow speed Hz
-	float leslieHornSpeedFast = 7.2; // horn fast speed Hz
+	float leslieHornSpeedSlow = 0.665; // horn slow speed Hz
+	float leslieHornSpeedFast = 7.05; // horn fast speed Hz
 	uint8_t leslieHornDeceleration = 127; // simulates weight of horn speaker
 	uint8_t leslieHornAcceleration = 127; // for speedup acceleration
 	uint8_t leslieLowpassFilter = 8 ; // drum lowpass filter
-	uint8_t	leslieDrumVolume = 16 ; // drum output volume
+	uint8_t	leslieDrumMicVolume = 16 ; // drum output volume
 	uint8_t leslieDrumPhase = 10;	// horn Phase 
 	uint8_t leslieDrumVibrato = 10; // drum vibrato
 	float leslieDrumSpeedSlow = 0.66; // drum slow speed Hz

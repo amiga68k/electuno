@@ -10,18 +10,46 @@ Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARR
 You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 
 File notes:
+	Now, the maximum buffer size for the vibrato effect is 7 bits (128).
+	Added ChorusTimer() function to this file.
 	Little changes in vibrato sample mixer.
 	Create 2 modes : 
 		CHORUS 1 : Upper and lower outputs for the same vibrato bus.
-		CHORUS 2 : Each keyboard has one vibrato bus. Can enable vibrato effect for upper or lower keyboards independently		
+		CHORUS 2 : Each keyboard has one vibrato bus. Can enable vibrato effect for upper or lower keyboards independently
 
 Problems:
 	Noises.
 	
-	
 */
 
+uint8_t vibrato ; 
+	
+void ChorusTimer()
+{	
+	static const uint8_t cbs = ( 1 <<CHORUSBUFFERSIZE ) -1 ;
+	static uint16_t chorusPeriod = ( 1000000 / chorusSpeed) / ( 1 <<CHORUSBUFFERSIZE ) ;
+	static uint32_t chorusStartMicros ;
+	static uint32_t chorusCurrentMicros ;
+	static uint8_t ctc ;	//	Chorus timer counter
 
+	chorusCurrentMicros = Micros ;
+	if ( chorusCurrentMicros - chorusStartMicros >= chorusPeriod )
+	{
+		chorusStartMicros = chorusCurrentMicros;
+		if ( ctc < cbs )
+		{
+			ctc++ ;
+		}else{
+			ctc = 0 ;
+		}
+		if ( ctc < cbs >>1 )
+		{
+			vibrato = ( ctc >>vibratoType ) + 1 ;
+		}else{
+			vibrato = ( ( cbs - ctc ) >>vibratoType) + 1 ;
+		}
+	}
+}
 
 #if CHORUS == 1
 	void Chorus()
@@ -35,16 +63,17 @@ Problems:
   
 		if (lowerVibratoSwitch == 1 or upperVibratoSwitch == 1)
 		{
-			chorusBuffer[csc] = mainOut >> 2 ;
-			vibratoOut = (chorusBuffer[csc + vibrato & cbs] ) + (chorusBuffer[csc - vibrato & cbs]);
+			chorusBuffer[csc] = mainOut >> 1;
+			vibratoOut = (chorusBuffer[csc + vibrato & cbs] );
 		}else{
 			vibratoOut = mainOut ;
 		}
 
-		mainOut = vibratoOut;
+		mainOut += vibratoOut;
 	}
 
 #elif CHORUS == 2
+
 	void Chorus()
 	{ 
 		static const int16_t cbs = (1 << CHORUSBUFFERSIZE) -1 ;	//	Chorus buffer size
@@ -53,26 +82,27 @@ Problems:
 		static int16_t chorusUpperBuffer[1<<CHORUSBUFFERSIZE];
 		int16_t vibratoLowerOut, vibratoUpperOut ;
 
-		csc++; if ( csc > cbs ){ csc = 0 ; }
-  
+		csc++ ; if ( csc > cbs ){ csc = 0 ; }
+		chorusLowerBuffer[csc] = lowerOut ;
+		chorusUpperBuffer[csc] = upperOut ;
+
 		if (lowerVibratoSwitch == 1)
-		{
-			chorusLowerBuffer[csc] = lowerOut >> 2 ;
-			vibratoLowerOut = (chorusLowerBuffer[csc + vibrato & cbs] ) + (chorusLowerBuffer[csc - vibrato & cbs]);
-			vibratoLowerOut += lowerOut >> 1 ;
+		{			
+			vibratoLowerOut = (chorusLowerBuffer[csc + vibrato & cbs] ) >> 1;
+			vibratoLowerOut += lowerOut ;
 		}else{
 			vibratoLowerOut = lowerOut ;
 		}
   
 		if (upperVibratoSwitch == 1)
-		{
-			chorusUpperBuffer[csc] = upperOut >> 2 ;
-			vibratoUpperOut = (chorusUpperBuffer[csc + vibrato & cbs] >> 1) + (chorusUpperBuffer[csc - vibrato & cbs]);
-			vibratoUpperOut += upperOut >> 1 ;
+		{			
+			vibratoUpperOut = (chorusUpperBuffer[csc + vibrato & cbs] ) >> 1;
+			vibratoUpperOut += upperOut ;
 		}else{
 			vibratoUpperOut = upperOut ;
 		}
 
 		mainOut = vibratoLowerOut + vibratoUpperOut;
 	}
+
 #endif

@@ -12,6 +12,7 @@ You should have received a copy of the GNU General Public License along with Foo
 File notes:
 	The variables have been moved to a new file: varsetup.h.
 	Some changes in OrganSetup() and OrganOutput().	
+	New function GetMicros
 
 Problems:
 #define 
@@ -87,7 +88,6 @@ Problems:
 #include "tonegenerator.h"
 
 #if CHORUS > 0
-	#include "chorustimer.h"
 	#include "chorus.h"
 #else
 	void ChorusTimer(){};
@@ -107,7 +107,6 @@ Problems:
 #endif
 
 #if LESLIE > 0
-	#include "leslietimer.h"
 	#include "leslie.h"	
 #else
 	void LeslieTimer(){};
@@ -170,9 +169,14 @@ void OrganRun()
 	WaveMix();
 }
 
-int16_t OrganOutput()
+void GetMicros()
 {
-	LeslieTimer();
+	Micros = micros() ;
+}
+
+int16_t OrganOutput()
+{	
+	GetMicros();	
 	ToneGenerator();
 	VolumeControl();
 	Chorus();

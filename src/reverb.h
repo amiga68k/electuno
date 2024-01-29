@@ -11,8 +11,9 @@ You should have received a copy of the GNU General Public License along with Foo
 
 File notes:
 	New code for test.
+	Fix some variables to working with Arduino Due
 Problems:
-	perfect buffer size depends of output frequency.
+	
 */
 
 void Reverb()
@@ -21,7 +22,7 @@ void Reverb()
 	static int16_t reverbBuffer[ 1 << REVERBBUFFERSIZE ] ;
 	static uint16_t reverbStep;
 	static int16_t reverbOut ;
-	static const uint16 reverbLines[4] = 
+	static const uint16_t reverbLines[4] = 
 	{
 		reverbBufferSize >> 3 ,
 		( reverbBufferSize >> 3 ) <<1,
@@ -40,7 +41,7 @@ void Reverb()
 
 	reverbOut = 0;
 
-	uint8_t rlc ;
+	uint8_t rlc = 0 ;
 
 	do
 	{

@@ -1,5 +1,5 @@
 /*
-Electuno for Arduino NANO/UNO/MEGA. 11025HZ
+Electuno for ESP8266 at 21Khz
 Get schematics and more info here:
 https://github.com/amiga68k/electuno
 
@@ -40,7 +40,7 @@ WAVESIZE
   
 POLYPHONY          
   Configures the polyphony. Avaiable options:
-  8 = 8 note polyphony of 16(max). -Default- 
+  8 = 8 note polyphony of 14(max). -Default- 
 
 UPPERMODE
   Defines the operation of the upper keyboard. Avaiable options:
@@ -94,100 +94,117 @@ LESLIEBUFFERSIZE
   Avaiable options:
   7 = 7 bit rotary effect buffer. -Default-
 */
-#define LOWRAM
-#define FREQTUNE 4
+
+#define WAVEMIXMODE 1
+#define FREQTUNE 2.125
+#define VOLUMECONTROL 0
+#define EXPRESSIONPEDAL 1
+#define CHORUS 2
+#define CHORUSBUFFERSIZE 5
+#define REVERB 1
+#define OVERDRIVE 1
+#define WAVESIZE 10
+#define POLYPHONY  12
 #define UPPERMODE 2
-#define LESLIE 1
-#define LESLIEBUFFERSIZE 7
+#define LOWERMODE 2
+#define PEDALMODE 1
+#define LESLIE 2
+#define LESLIEBUFFERSIZE 10
 
 ///////////////////////////
 //End compilation options//
 ///////////////////////////
 
-
-#include "SPI.h"
-#define MCP4921_CS_PIN A0
+#include <ESP8266WiFi.h>
+#include <SPI.h>
+#include <MCP_DAC.h>
 #include <MIDI.h>
+MCP4911 MCP;
 MIDI_CREATE_DEFAULT_INSTANCE();
-
-//Static settings
-#define WAVESIZE 6 // in bits ( 4=16, 5=32, 6=64, etc)
-#define POLYPHONY 8 
-#define UPPERMODE 1 // 0 = disable, 1 = 9 flutes, 2= 9 flutes+percusion 
-#define LOWERMODE 1 // 0 = disable, 1 = 4 flutes, 2= 9 flutes
-#define CHORUS 0 // 0=disable, 1=enable
-#define CHORUSBUFFERSIZE 4 // in bits ( 4=16, 5=32, 6=64, etc)
-#define REVERB 0
-#define OVERDRIVE 0
-#define LESLIE 1 // 0 = disable, 1 = enable , 2 = full
-#define LESLIEBUFFERSIZE 7 // in bits ( 4=16, 5=32, 6=64, etc)
-#define LESLIEEQBUFFERSIZE 2 // in bits ( 3=8, 4=16, 5=32, 6=64, etc)
-#define LESLIEFILTERSIZE 3 // in bits ( 3=8, 4=16, 5=32, 6=64, etc)
-
 #include <electuno.h>
 
-// Dynamic Settings
 void MySettings()
 { 
+/////////////////////////////////
+//User/midi realtime parameters//
+/////////////////////////////////
+
   upperDrawbar[0]=8;
   upperDrawbar[1]=8;
   upperDrawbar[2]=8;
-  upperDrawbar[3]=8;
+  upperDrawbar[3]=0;
   upperDrawbar[4]=0;
   upperDrawbar[5]=0;
   upperDrawbar[6]=0;
   upperDrawbar[7]=0;
-  upperDrawbar[8]=8;  
-  rotaryValue = 1;
+  upperDrawbar[8]=8;
   
-  // leslieLowpassFilter = 8 ; // horn input EQ point
-  // leslieHipassFilter = 11 ; // drum input EQ point
-  // leslieDrumVolume = 7 ; // drum input Gain
-  // leslieHornVolume = 8 ; // horn input GAin
+  lowerDrawbar[0]=0;
+  lowerDrawbar[1]=0;
+  lowerDrawbar[2]=8;
+  lowerDrawbar[3]=8;
+  lowerDrawbar[4]=0;
+  lowerDrawbar[5]=0;
+  lowerDrawbar[6]=0;
+  lowerDrawbar[7]=0;
+  lowerDrawbar[8]=0;
+
+  pedalDrawbar[0]=0;
+  pedalDrawbar[1]=0;
+  pedalDrawbar[2]=8;
+  pedalDrawbar[3]=0;
+  pedalDrawbar[4]=0;
+  pedalDrawbar[5]=0;
+  pedalDrawbar[6]=0;
+  pedalDrawbar[7]=0;
+  pedalDrawbar[8]=0;  
+
+  rotaryValue = 0;
+  leslieDrumVibrato = 6;
+  leslieHornVibrato = 10;
+  leslieLowpassFilter = 16 ;
+  leslieHipassFilter = 14 ; 
+  leslieDrumPhase = 10 ; 
+  leslieHornPhase = 16; 
+  leslieDrumMicVolume = 16 ; 
+  leslieHornMicVolume = 16; 
+
+///////////////////////////
+//User on boot parameters//
+///////////////////////////
+
+   leslieHornDeceleration = 200;
+   leslieHornAcceleration = 255;
+   leslieDrumDeceleration = 1;
+   leslieDrumAcceleration = 16;  
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
   // vibratoType = 0; // 0=C1  1=V1
-  // rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast
-  // leslieHornOffset = 0; 
+  // rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast 
   // leslieHornSpeedSlow = 0.83; // Horn slow speed Hz
-  // leslieHornSpeedFast = 7.5; // Horn speed Hz
-  // leslieHornInertia = 3; // simulates weight of horn speaker (needs fix and optimize for correct simulation)
-  // leslieHornMotorTorque = 10; // (needs fix and optimize for correct simulation)
+  // leslieHornSpeedFast = 7.5; // Horn speed Hz  
   // leslieDrumSpeedSlow = 0.66; // Drum slow speed Hz
-  // leslieDrumSpeedFast = 5.9; // Drum fast speed Hz
-  // leslieDrumInertia = 2; // simulates weight of horn speaker (needs fix and optimize for correct simulation)
-  // leslieDrumMotorTorque = 2; // 
-}
-
-void TimerSetup()
-{  
-
-  TCCR1A = 0b00000010;
-  TCCR1B = 0b11011001;  
-
-  ICR1 = 1450; //11025HZ
-  //ICR1 = 999; //16000Hz
-  //ICR1 = 724; //22050Hz
-  //ICR1 = 569; //28050Hz
-  //ICR1 = 499; //32000Hz
-  TIMSK1 |= (1 << TOIE1);
-}
-
-void DAC_setup()
-{
-  pinMode(MCP4921_CS_PIN, OUTPUT);
-  pinMode(11, OUTPUT);
-  pinMode(13, OUTPUT);
-  digitalWrite(MCP4921_CS_PIN, HIGH);
-  SPI.begin();
+  // leslieDrumSpeedFast = 5.9; // Drum fast speed Hz  
 }
 
 void setup() {
+  WiFi.mode(WIFI_OFF);
   MySettings();
   MidiSetup();  
   OrganSetup();
   DAC_setup();
-  TimerSetup();
+  Esp8266TimerSetup();
+}
+void ICACHE_RAM_ATTR onTimerISR()
+{ 
+  MCP.fastWriteA(( OrganOutput() >> 3 ) + 2047 ) ;
+}
+void Esp8266TimerSetup()
+{    
+    //  Set output frequency
+    timer1_attachInterrupt(onTimerISR);
+    timer1_enable(TIM_DIV1, TIM_EDGE, TIM_LOOP);
+    timer1_write(3808); //21000Hz 
 }
 
 void MidiSetup()
@@ -200,24 +217,14 @@ void MidiSetup()
   MIDI.turnThruOff();
 }
 
-void myDac(uint16_t value)
+void DAC_setup()
 {
-  uint16_t data = 0x3000 | value;
-  digitalWrite(MCP4921_CS_PIN, LOW);
-  SPI.beginTransaction(SPISettings(16000000, MSBFIRST, SPI_MODE0));
-  SPI.transfer((uint8_t)(data >> 8));
-  SPI.transfer((uint8_t)(data & 0xFF));
-  SPI.endTransaction();
-  digitalWrite(MCP4921_CS_PIN, HIGH);
+  MCP.begin(15);
+  MCP.fastWriteA(0); 
 }
 
 void loop()
 {
   MIDI.read();
   OrganRun();
-}
-
-ISR(TIMER1_OVF_vect) 
-{
-  myDac(OrganOutput() + 2047 ) ;
 }

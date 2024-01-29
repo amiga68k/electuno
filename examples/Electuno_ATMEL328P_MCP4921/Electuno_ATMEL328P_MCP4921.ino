@@ -1,11 +1,6 @@
 /*
-Electuno for Arduino Due (testing)
-
-MIDI OUT -> RX1 Pin
-AUDIO    -> DAC0 Pin
-
+Electuno for Arduino NANO/UNO/MEGA. 11025HZ
 Get schematics and more info here:
-( For Due coming soon )
 https://github.com/amiga68k/electuno
 
 ///////////////////////
@@ -45,7 +40,7 @@ WAVESIZE
   
 POLYPHONY          
   Configures the polyphony. Avaiable options:
-  8 = 8 note polyphony of 16(max). -Default- 
+  8 = 8 note polyphony of 14(max). -Default- 
 
 UPPERMODE
   Defines the operation of the upper keyboard. Avaiable options:
@@ -99,29 +94,24 @@ LESLIEBUFFERSIZE
   Avaiable options:
   7 = 7 bit rotary effect buffer. -Default-
 */
-
-#define FREQTUNE 2
-#define VOLUMECONTROL 0
+#define LOWRAM
+#define WAVEMIXMODE 1
+#define FREQTUNE 4
 #define EXPRESSIONPEDAL 1
 #define CHORUS 1
-//#define REVERB 1 // untested
-//#define OVERDRIVE 1 // untested
-#define WAVESIZE 10
-#define POLYPHONY  11
-#define UPPERMODE 2
-#define LOWERMODE 2
-#define PEDALMODE 1
-#define LESLIE 2
-#define LESLIEBUFFERSIZE 8
+#define CHORUSBUFFERSIZE 3
+#define UPPERMODE 1
+#define LESLIE 1
 
 ///////////////////////////
 //End compilation options//
 ///////////////////////////
 
-#include <DueTimer.h> // Get from official library manager or download here: https://github.com/ivanseidel/DueTimer
-#include <MIDI.h> // Get from official library manager or download here: https://github.com/FortySevenEffects/arduino_midi_library
-//MIDI_CREATE_DEFAULT_INSTANCE();
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
+
+#include "SPI.h"
+#define MCP4921_CS_PIN A0
+#include <MIDI.h>
+MIDI_CREATE_DEFAULT_INSTANCE();
 #include <electuno.h>
 
 void MySettings()
@@ -133,72 +123,59 @@ void MySettings()
   upperDrawbar[0]=8;
   upperDrawbar[1]=8;
   upperDrawbar[2]=8;
-  upperDrawbar[3]=8;
-  upperDrawbar[4]=8;
-  upperDrawbar[5]=8;
-  upperDrawbar[6]=8;
-  upperDrawbar[7]=8;
+  upperDrawbar[3]=0;
+  upperDrawbar[4]=0;
+  upperDrawbar[5]=0;
+  upperDrawbar[6]=0;
+  upperDrawbar[7]=0;
   upperDrawbar[8]=8;
-  
-  lowerDrawbar[0]=0;
-  lowerDrawbar[1]=0;
-  lowerDrawbar[2]=8;
-  lowerDrawbar[3]=8;
-  lowerDrawbar[4]=0;
-  lowerDrawbar[5]=0;
-  lowerDrawbar[6]=0;
-  lowerDrawbar[7]=0;
-  lowerDrawbar[8]=0;
-
-  pedalDrawbar[0]=0;
-  pedalDrawbar[1]=0;
-  pedalDrawbar[2]=8;
-  pedalDrawbar[3]=8;
-  pedalDrawbar[4]=0;
-  pedalDrawbar[5]=0;
-  pedalDrawbar[6]=0;
-  pedalDrawbar[7]=0;
-  pedalDrawbar[8]=0;  
 
   rotaryValue = 0;
-  leslieDrumVibrato = 16;
-  leslieHornVibrato = 16;
-  leslieLowpassFilter = 0 ;
-  leslieHipassFilter = 13 ; 
-  leslieDrumPhase = 0 ; 
-  leslieHornPhase = 0; 
-  leslieDrumVolume = 16 ; 
-  leslieHornVolume = 16; 
+
+  leslieHornVibrato = 8;
 
 ///////////////////////////
 //User on boot parameters//
 ///////////////////////////
 
-  // leslieHornDeceleration = 200;
-  // leslieHornAcceleration = 255;
-  // leslieDrumDeceleration = 1;
-  // leslieDrumAcceleration = 16;  
+   leslieHornDeceleration = 200;
+   leslieHornAcceleration = 255;
+    
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
-  // vibratoType = 0; // 0=C1  1=V1
-  // rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast 
   // leslieHornSpeedSlow = 0.83; // Horn slow speed Hz
-  // leslieHornSpeedFast = 7.5; // Horn speed Hz  
-  // leslieDrumSpeedSlow = 0.66; // Drum slow speed Hz
-  // leslieDrumSpeedFast = 5.9; // Drum fast speed Hz  
-}
-
-void setup() {
-  MySettings();
-  OrganSetup();
-  MidiSetup();  
-  DAC_setup();
-  TimerSetup();  
+  // leslieHornSpeedFast = 7.05; // Horn speed Hz  
 }
 
 void TimerSetup()
 {  
-  Timer3.attachInterrupt(OutputTimer).setFrequency(22050).start();
+
+  TCCR1A = 0b00000010;
+  TCCR1B = 0b11011001;  
+
+  ICR1 = 1450; //11025HZ
+  //ICR1 = 999; //16000Hz
+  //ICR1 = 724; //22050Hz
+  //ICR1 = 569; //28050Hz
+  //ICR1 = 499; //32000Hz
+  TIMSK1 |= (1 << TOIE1);
+}
+
+void DAC_setup()
+{
+  pinMode(MCP4921_CS_PIN, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(13, OUTPUT);
+  digitalWrite(MCP4921_CS_PIN, HIGH);
+  SPI.begin();
+}
+
+void setup() {
+  MySettings();
+  MidiSetup();  
+  OrganSetup();
+  DAC_setup();
+  TimerSetup();
 }
 
 void MidiSetup()
@@ -211,10 +188,15 @@ void MidiSetup()
   MIDI.turnThruOff();
 }
 
-void DAC_setup()
+void myDac(uint16_t value)
 {
-  analogWriteResolution(12);
-  pinMode(DAC0, OUTPUT);
+  uint16_t data = 0x3000 | value;
+  digitalWrite(MCP4921_CS_PIN, LOW);
+  SPI.beginTransaction(SPISettings(16000000, MSBFIRST, SPI_MODE0));
+  SPI.transfer((uint8_t)(data >> 8));
+  SPI.transfer((uint8_t)(data & 0xFF));
+  SPI.endTransaction();
+  digitalWrite(MCP4921_CS_PIN, HIGH);
 }
 
 void loop()
@@ -223,9 +205,7 @@ void loop()
   OrganRun();
 }
 
-void OutputTimer()
+ISR(TIMER1_OVF_vect) 
 {
-  int16_t aOut = ( OrganOutput() >> 3 ) +2048 ;
-  analogWrite(DAC0, aOut ) ;
-
+  myDac(( OrganOutput() << 3 ) + 2047 ) ;
 }

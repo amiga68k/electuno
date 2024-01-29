@@ -19,11 +19,5 @@ Problems:
 
 void OverDrive()
 {
-	mainOut =
-		(
-			((mainOut * (32 - overdrive))>>5)
-			+
-			(constrain( ((mainOut * overdrive)>>4), -600 , 600 ))
-		)
-	;
+	mainOut += constrain( ((mainOut * overdrive)>>5), -500 , 500 ) ;
 }

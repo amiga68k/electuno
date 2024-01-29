@@ -1,5 +1,5 @@
 /*
-Electuno for ESP8266. 22050HZ
+Electuno for Arduino MEGA at 11025HZ
 Get schematics and more info here:
 https://github.com/amiga68k/electuno
 
@@ -40,7 +40,7 @@ WAVESIZE
   
 POLYPHONY          
   Configures the polyphony. Avaiable options:
-  8 = 8 note polyphony of 16(max). -Default- 
+  8 = 8 note polyphony of 14(max). -Default- 
 
 UPPERMODE
   Defines the operation of the upper keyboard. Avaiable options:
@@ -94,32 +94,24 @@ LESLIEBUFFERSIZE
   Avaiable options:
   7 = 7 bit rotary effect buffer. -Default-
 */
-//#define LOWRAM
+#define LOWRAM
 #define WAVEMIXMODE 1
-#define FREQTUNE 2
-#define VOLUMECONTROL 0
+#define FREQTUNE 4
 #define EXPRESSIONPEDAL 1
-//#define CHORUS 1
-//#define REVERB 1
-//#define OVERDRIVE 1
-#define WAVESIZE 10
-//#define POLYPHONY  11
-#define UPPERMODE 2
-#define LOWERMODE 2
-#define PEDALMODE 1
-#define LESLIE 2
-#define LESLIEBUFFERSIZE 9
+#define CHORUS 1
+#define CHORUSBUFFERSIZE 3
+#define UPPERMODE 1
+#define LOWERMODE 1
+#define LESLIE 1
 
 ///////////////////////////
 //End compilation options//
 ///////////////////////////
 
-#include <ESP8266WiFi.h>
-#include <SPI.h>
-#include <MCP_DAC.h>
+#include "SPI.h"
+#define MCP4921_CS_PIN 53
 #include <MIDI.h>
-MCP4911 MCP;
-MIDI_CREATE_DEFAULT_INSTANCE();
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 #include <electuno.h>
 
 void MySettings()
@@ -128,25 +120,20 @@ void MySettings()
 //User/midi realtime parameters//
 /////////////////////////////////
 
-  upperDrawbar[0]=0;
-  upperDrawbar[1]=0;
-  upperDrawbar[2]=0;
+  upperDrawbar[0]=8;
+  upperDrawbar[1]=8;
+  upperDrawbar[2]=8;
   upperDrawbar[3]=0;
   upperDrawbar[4]=0;
   upperDrawbar[5]=0;
-  upperDrawbar[6]=8;
-  upperDrawbar[7]=8;
+  upperDrawbar[6]=0;
+  upperDrawbar[7]=0;
   upperDrawbar[8]=8;
-  
-  lowerDrawbar[0]=8;
-  lowerDrawbar[1]=8;
+
+  lowerDrawbar[0]=0;
+  lowerDrawbar[1]=0;
   lowerDrawbar[2]=8;
   lowerDrawbar[3]=8;
-  lowerDrawbar[4]=0;
-  lowerDrawbar[5]=0;
-  lowerDrawbar[6]=0;
-  lowerDrawbar[7]=0;
-  lowerDrawbar[8]=0;
 
   pedalDrawbar[0]=0;
   pedalDrawbar[1]=0;
@@ -156,17 +143,11 @@ void MySettings()
   pedalDrawbar[5]=0;
   pedalDrawbar[6]=0;
   pedalDrawbar[7]=0;
-  pedalDrawbar[8]=0;  
+  pedalDrawbar[8]=0;
 
   rotaryValue = 0;
-  leslieDrumVibrato = 8;
+
   leslieHornVibrato = 8;
-  leslieLowpassFilter = 0 ;
-  leslieHipassFilter = 14 ; 
-  leslieDrumPhase = 0 ; 
-  leslieHornPhase = 0; 
-  leslieDrumVolume = 0 ; 
-  leslieHornVolume = 20; 
 
 ///////////////////////////
 //User on boot parameters//
@@ -174,38 +155,34 @@ void MySettings()
 
    leslieHornDeceleration = 200;
    leslieHornAcceleration = 255;
-   leslieDrumDeceleration = 1;
-   leslieDrumAcceleration = 16;  
+    
   // chorusSpeed = 6.86; // in Hz
   // upperVibratoSwitch = 0; // 0=Off  1=On
-  // vibratoType = 0; // 0=C1  1=V1
-  // rotaryValue = 0; // initial rotary status : 0=off  1=slow  2=fast 
   // leslieHornSpeedSlow = 0.83; // Horn slow speed Hz
-  // leslieHornSpeedFast = 7.5; // Horn speed Hz  
-  // leslieDrumSpeedSlow = 0.66; // Drum slow speed Hz
-  // leslieDrumSpeedFast = 5.9; // Drum fast speed Hz  
+  // leslieHornSpeedFast = 7.05; // Horn speed Hz  
+}
+
+void TimerSetup()
+{  
+  TCCR1A = 0b00000010;
+  TCCR1B = 0b11011001; 
+  ICR1 = 1450; //11025HZ
+  TIMSK1 |= (1 << TOIE1);
+}
+
+void DAC_setup()
+{
+  pinMode(MCP4921_CS_PIN, OUTPUT);
+  digitalWrite(MCP4921_CS_PIN, HIGH);
+  SPI.begin();
 }
 
 void setup() {
-  WiFi.mode(WIFI_OFF);
   MySettings();
   MidiSetup();  
   OrganSetup();
   DAC_setup();
-  Esp8266TimerSetup();
-}
-void ICACHE_RAM_ATTR onTimerISR()
-{ 
-  MCP.fastWriteA(( OrganOutput() >> 3 ) + 2047 ) ;
-}
-void Esp8266TimerSetup()
-{    
-    timer1_attachInterrupt(onTimerISR);
-    timer1_enable(TIM_DIV1, TIM_EDGE, TIM_LOOP);
-    //timer1_write(7254); //11025Hz
-    timer1_write(3627); //22050Hz
-    //timer1_write(1811); //44100Hz
-
+  TimerSetup();
 }
 
 void MidiSetup()
@@ -218,14 +195,24 @@ void MidiSetup()
   MIDI.turnThruOff();
 }
 
-void DAC_setup()
+void myDac(uint16_t value)
 {
-  MCP.begin(15);
-  MCP.fastWriteA(0); 
+  uint16_t data = 0x3000 | value;
+  digitalWrite(MCP4921_CS_PIN, LOW);
+  SPI.beginTransaction(SPISettings(16000000, MSBFIRST, SPI_MODE0));
+  SPI.transfer((uint8_t)(data >> 8));
+  SPI.transfer((uint8_t)(data & 0xFF));
+  SPI.endTransaction();
+  digitalWrite(MCP4921_CS_PIN, HIGH);
 }
 
 void loop()
 {
   MIDI.read();
   OrganRun();
+}
+
+ISR(TIMER1_OVF_vect) 
+{
+  myDac(( OrganOutput() << 3 ) + 2047 ) ;
 }

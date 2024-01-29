@@ -14,8 +14,8 @@
     leslieHipassFilter	KEYWORD1
     leslieDrumPhase	KEYWORD1
     leslieHornPhase	KEYWORD1
-    leslieDrumVolume	KEYWORD1
-    leslieHornVolume	KEYWORD1
+    leslieDrumMicVolume	KEYWORD1
+    leslieHornMicVolume	KEYWORD1
     rotaryValue	KEYWORD1
     leslieHornSpeedSlow	KEYWORD1
     leslieHornSpeedFast	KEYWORD1

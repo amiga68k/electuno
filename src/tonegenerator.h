@@ -17,7 +17,8 @@ File notes:
 	Fix variables for Arduino Due compatibility (Arduino Due cannot reset variables as 'uint8_t i;'. Correct mode is 'uint8_t i = 0;' )
 	
 Problems:
-	Little noise when key change state.
+	This function generates a lot of noise in the higher notes; If the wave is sharper, the noise is more noticeable.
+	Perhaps the problem is in the way of mixing the drawbars into a single array and then reproducing it.
 
 */
 
@@ -35,13 +36,13 @@ Problems:
 			switch (audioChannel[i])
 			{
 				case 1:
-					upperOut += wave[waveNumber[i]][oscillators[i] >> w];
+					upperOut += wave[waveNumber[i]][oscillators[i] >> w] >> 3; // '>> 3' is used so that the generated sample does not exceed 4608
 					break;
 				case 2:
-					lowerOut += wave[waveNumber[i]][oscillators[i] >> w];
+					lowerOut += wave[waveNumber[i]][oscillators[i] >> w] >> 3;
 					break;
 				case 3:
-					pedalOut += wave[waveNumber[i]][oscillators[i] >> w];
+					pedalOut += wave[waveNumber[i]][oscillators[i] >> w] >> 3;
 					break;
 			}
 			i++ ;		

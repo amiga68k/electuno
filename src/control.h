@@ -38,8 +38,8 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 57: leslieHornVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
 				case 58: leslieLowpassFilter  =     map(rvalue2,  0,127,  0, 16); break;
 				case 59: leslieHipassFilter  =      map(rvalue2,  0,127,  0, 16); break;
-				case 60: leslieDrumVolume  =      	map(rvalue2,  0,127,  0, 16); break;
-				case 61: leslieHornVolume  =       	map(rvalue2,  0,127,  0, 16); break;
+				case 60: leslieDrumMicVolume  =      	map(rvalue2,  0,127,  0, 16); break;
+				case 61: leslieHornMicVolume  =       	map(rvalue2,  0,127,  0, 16); break;
 	// RESERVED case 62: leslieHornSpeedSlow
 	// RESERVED case 63: leslieHornSpeedFast
 	// RESERVED case 64: leslieHornAcceleration
@@ -66,6 +66,7 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 		case 2:
 			switch (rvalue1)
 			{
+
 				case 1:  lowerVolume =				map(rvalue2,  0,127,  0,127); break;
 				case 70: lowerDrawbar[0] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 71: lowerDrawbar[1] =      	map(rvalue2,  0,127,  0,  8); break;
@@ -76,7 +77,7 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 76: lowerDrawbar[6] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 77: lowerDrawbar[7] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 78: lowerDrawbar[8] =      	map(rvalue2,  0,127,  0,  8); break;
-				*/
+				
 			}
 		break;
 		case 3:

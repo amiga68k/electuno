@@ -5,6 +5,11 @@ This version is continually changing. There may be incomplete or non-working par
 You can also download an already generated release:
 https://github.com/amiga68k/electuno/releases
 
+**Requirements:**
+
+coming soon
+
+
 **Changes in this version:**
 -  Fixed problem in accelerating the Leslie speaker simulation.
 -  Added more MIDI controls (See list in this document below).
@@ -12,6 +17,7 @@ https://github.com/amiga68k/electuno/releases
 -  Added independent volume controls for each keyboard.
 -  Added support for expression pedal.
 -  Added new LOWRAM method designed for Atmel328P and similar.
+-  Added Arduino Due example test code.
 
 **Presentation**
 

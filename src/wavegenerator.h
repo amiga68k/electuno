@@ -10,6 +10,10 @@ Electuno is distributed in the hope that it will be useful, but WITHOUT ANY WARR
 You should have received a copy of the GNU General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 
 File notes:
+	NEW:
+
+	
+	OLD from 0.1.0 :
 	Fix generated wave output. Now the generated wave maintains a limit of -2304 to +2304. 
 	Added pedal wave array and drawbars mixer.
 	New option called WAVEMIXMODE now loudness some tones for limits the volume of certain drawbars in some parts of the keyboard, similar to  old analog and tonewheel organs
@@ -35,7 +39,7 @@ void WaveSetup()	//	Fill wave array with a sine wave.
 void WaveMix()
 { 
 //  Wave mixer step counter
-	const uint8_t ws = WAVESIZE - 6 + waveMode ; 
+	const uint8_t ws = waveMode + ( WAVESIZE - 9 ) ; // This is used so that the generated sample does not exceed 36864
 	const uint16_t wl = waveLength - 1 ;
 	static uint16_t wavemixCounter;
 	static const bool wm = WAVEMIXMODE ;
@@ -44,7 +48,7 @@ void WaveMix()
 
 //  Percusive keys timer
 	#if UPPERMODE == 2
-		percCurrentMicros = micros();
+		percCurrentMicros = Micros ;
 		if (percCurrentMicros - percStartMicros >= percPeriod)
 		{
 			percStartMicros = percCurrentMicros;
