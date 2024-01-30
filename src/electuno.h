@@ -162,21 +162,24 @@ void OrganSetup()
 	WaveSetup();
 }
 
-void OrganRun()
-{	
-	ChorusTimer();
-	LeslieTimer();
-	WaveMix();
-}
-
 void GetMicros()
 {
 	Micros = micros() ;
 }
 
+void OrganRun()
+{	
+	ChorusTimer();
+	LeslieTimer();
+	WaveMix();
+	GetMicros();
+}
+
+
+
 int16_t OrganOutput()
 {	
-	GetMicros();	
+		
 	ToneGenerator();
 	VolumeControl();
 	Chorus();
