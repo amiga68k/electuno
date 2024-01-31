@@ -119,7 +119,7 @@ LESLIEBUFFERSIZE
 #include <MCP_DAC.h>
 MCP4911 MCP;
 #include <MIDI.h>
-MIDI_CREATE_DEFAULT_INSTANCE();
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 #include <electuno.h>
 
 void MySettings()
