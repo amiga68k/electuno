@@ -1,7 +1,7 @@
 /*
 Electuno for Arduino Due at 21Khz
 
-MIDI OUT -> RX1 Pin
+MIDI  -> TX1/RX1 Pin
 AUDIO    -> DAC0 Pin
 
 Get schematics and more info here:
@@ -122,7 +122,6 @@ LESLIEBUFFERSIZE
 
 #include <DueTimer.h> // Get from official library manager or download here: https://github.com/ivanseidel/DueTimer
 #include <MIDI.h> // Get from official library manager or download here: https://github.com/FortySevenEffects/arduino_midi_library
-//MIDI_CREATE_DEFAULT_INSTANCE();
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 #include <electuno.h>
 
