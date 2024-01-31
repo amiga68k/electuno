@@ -1,4 +1,8 @@
-# Electuno 0.1.2. Vintage organ simulator
+** This branch is constantly changing, it is designed for testing.
+To use the latest stable version go to: **
+https://github.com/amiga68k/electuno
+
+# Electuno 0.1.3. Vintage organ simulator
 This library attempts to simulate a Hammond B3 organ and a Leslie speaker with two cabinets (Drum & horn).
 Unlike other organ simulators, the tones are generated from a sinus wave calculated at the start of the performance.
 The code only uses integers except in the calculation of the musical note. This is so that it works on CPUs without a floating point unit.
