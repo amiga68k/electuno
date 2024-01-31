@@ -1,13 +1,27 @@
 # Electuno 0.1.2. Vintage organ simulator
+This library attempts to simulate a Hammond B3 organ and a Leslie speaker with two cabinets (Drum & horn).
+Unlike other organ simulators, the tones are generated from a sinus wave calculated at the start of the performance.
+The code only uses integers except in the calculation of the musical note. This is so that it works on CPUs without a floating point unit.
+Electuno has a lot of glitches and unwanted noise, but by using some capacitors and resistors at the output of the DAC, it can sound similar to a Hammond organ. 
+You can hear it in the sample video.
 
-IMPORTANT:
-This version is continually changing. There may be incomplete or non-working parts at times when I am testing. To use a version without this problem, I recommend installing the library directly from the Arduino IDE library manager.
-You can also download an already generated release:
-https://github.com/amiga68k/electuno/releases
+Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
+
+
 
 **Requirements:**
 
-coming soon
+- Tested on different cards and architectures:
+Arduino NANO, UNO, MEGA (8 bits) and DUE (32 bits).
+ESP8266 and ESP32 also working (See example files).
+
+- MCP4921 12 bits DAC. (Optional, but example code has writen for this).
+
+- Midi library. Get from Arduino library manager or from https://github.com/FortySevenEffects/arduino_midi_library.
+
+- MCP_DAC library. Get from Arduino library manager or from https://github.com/RobTillaart/MCP_DAC.
+
+- Arduino Due: Needs DueTimer library from Arduinolibrary manager or get from: https://github.com/ivanseidel/DueTimer.
 
 
 **Changes in this version:**
@@ -16,41 +30,31 @@ coming soon
 -  Added pedal keyboard.
 -  Added independent volume controls for each keyboard.
 -  Added support for expression pedal.
+-  Added phase modulation for Leslie speaker code.
 -  Added new LOWRAM method designed for Atmel328P and similar.
 -  Added Arduino Due example test code.
 -  Added ESP32 WROOM 32 example test code.
 
-
-**Presentation**
-
-
-This project tries to simulate the vintage organs as Electone or Hammond, in small AVRs.
-
-Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
-
-The code still needs a lot of work and organization; But it can be used on esp8266 boards with all the effects activated, two independent keyboards, and a polyphony of 16 simultaneous keys, at a frequency of approximately 22050Hz.
-
-On a simple but effective ATMEL328 you can run two independent keyboards with vibrato/chorus, but the Leslie effect is very heavy.
-Later I will try an Arduino DUE and an ESP32.
 
 Specifications:
 - Sound output through DAC MCP4921 (It is possible to operate it through PWM or other DACs).
 - Controllable via MIDI (You need the MIDI library from the Arduino repositories).
 - Fully modular to be able to disable functions on low-power CPUs.
 - Simulates two independent keyboards (upper & lower) with nine drawbars each.
+- Foldback effect on last 2 octaves.
 - Percussion effect on the upper keyboard.
 - Independent vibrato chorus scanner effect for each keyboard.
 - Delay effect to simulate a reverb.
 - Overdrive effect.
 - Two-way Leslie speaker with different speeds and accelerations.
 
-It still has a lot of glitches and dirty noises, but it can be fun. 
-
-I have made it work on arduino Nano, Mega and Due; Although at the moment, i only have uploaded example files for nodeMCU-esp8266 with MCP4921 DAC and Arduino NANO328 with same DAC.
-
 Only tested with Arduino IDE 1.8.19.
 
-I hope little by little to add more example files and configurations (pwm in nano for example)
+**Arduino NANO/UNO/MEGA**
+
+To use this library on an 8-bit AVR, it is necessary to define LOWRAM.
+In this mode the polyphony is limited to 8, and it is only capable of simulating one way of the rotary effect. Because of this, the sound is more similar to a Yamaha Electone organ with its built-in rotary speaker.
+
 
 **ESP8266 and ESP32 notes**
 
@@ -59,13 +63,21 @@ ESP8266: https://www.google.com/search?q=esp8266+on+arduino+ide
 ESP32: https://www.google.com/search?q=esp32+on+arduino+ide
 Once support for your board is installed, you must install this library from the Arduino library manager;
 Just search for 'electuno' and the available versions will appear.
-
 Inside Arduino IDE, go to the menu 'file->examples->electuno->ESP8266xxxxxx'.
+Choose the type of board in the 'Tools' menu.
+Choose the maximum CPU speed.
 
-Pin configuration for ESP32:
+See schematics for ESP8266: https://github.com/amiga68k/electuno/blob/main/extras/electuno_schematics_nodeMCU.png
+
+Pin configuration for ESP32 and MCP4921:
 
 	ESP32		MCP4921
 
+	GPIO23	->	SDI(pin4)
+
+	GPIO18	->	SCK(pin3)
+
+	GPIO15	->	CS(pin2)
 
 
 
