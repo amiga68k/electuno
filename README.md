@@ -18,6 +18,8 @@ coming soon
 -  Added support for expression pedal.
 -  Added new LOWRAM method designed for Atmel328P and similar.
 -  Added Arduino Due example test code.
+-  Added ESP32 WROOM 32 example test code.
+
 
 **Presentation**
 
@@ -50,13 +52,21 @@ Only tested with Arduino IDE 1.8.19.
 
 I hope little by little to add more example files and configurations (pwm in nano for example)
 
-**ES8266 notes**
+**ESP8266 and ESP32 notes**
 
-First you must install support for this MCU in Arduino IDE: https://www.google.com/search?q=esp8266+on+arduino+ide.
-Once support for Esp8266 is installed, you must install this library from the Arduino library manager;
+First you must install support for this MCU in Arduino IDE:
+ESP8266: https://www.google.com/search?q=esp8266+on+arduino+ide
+ESP32: https://www.google.com/search?q=esp32+on+arduino+ide
+Once support for your board is installed, you must install this library from the Arduino library manager;
 Just search for 'electuno' and the available versions will appear.
 
-Inside Arduino IDE, go to the menu 'file->examples->electuno->ESP8266xxxxxx'
+Inside Arduino IDE, go to the menu 'file->examples->electuno->ESP8266xxxxxx'.
+
+Pin configuration for ESP32:
+
+	ESP32		MCP4921
+
+
 
 
 **COMPILATION OPTIONS:**
