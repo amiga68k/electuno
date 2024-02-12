@@ -25,7 +25,7 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 		case 1:
 			switch (rvalue1)
 			{
-				case 1:  reverb  =              	map(rvalue2,  0,127,  0, 64); break;
+				case 1:  upperVolume  =              	map(rvalue2,  0,127,  0, 127); break;
 				case 11: expressionPedal =      	map(rvalue2,  0,127,  0,127); break;
 	// RESERVED case 49: chorusSpeed
 				case 50: lowerVibratoSwitch =   	map(rvalue2,  0,127,  0,  1); break;
@@ -38,17 +38,16 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 57: leslieHornVibrato  =   	map(rvalue2,  0,127,  0, 16); break;
 				case 58: leslieLowpassFilter  =     map(rvalue2,  0,127,  0, 16); break;
 				case 59: leslieHipassFilter  =      map(rvalue2,  0,127,  0, 16); break;
-				case 60: leslieDrumMicVolume  =      	map(rvalue2,  0,127,  0, 16); break;
-				case 61: leslieHornMicVolume  =       	map(rvalue2,  0,127,  0, 16); break;
-	// RESERVED case 62: leslieHornSpeedSlow
-	// RESERVED case 63: leslieHornSpeedFast
+				case 60: leslieDrumMicVolume  =     map(rvalue2,  0,127,  0, 16); break;
+				case 61: leslieHornMicVolume  =     map(rvalue2,  0,127,  0, 16); break;
+				case 62: leslieDrumPhase  =			map(rvalue2,  0,127,  0, 16); break;
+				case 63: leslieHornPhase  =			map(rvalue2,  0,127,  0, 16); break;
 	// RESERVED case 64: leslieHornAcceleration
 	// RESERVED case 65: leslieHornDeceleration
 	// RESERVED case 66: leslieDrumSpeedSlow
 	// RESERVED case 67: leslieDrumSpeedFast
 	// RESERVED case 68: leslieDrumAcceleration
 	// RESERVED case 69: leslieDrumDeceleration
-				case 3:  upperVolume =				map(rvalue2,  0,127,  0,127); break;
 				case 80: percEnable =           	map(rvalue2,  0,127,  0,  1); break;
 				case 81: percType =        harmonic[map(rvalue2,  0,127,  0,  1)]; break;
 				case 82: percPeriod =     percSpeed[map(rvalue2,  0,127,  0,  1)]; break;				
@@ -61,6 +60,8 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 76: upperDrawbar[6] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 77: upperDrawbar[7] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 78: upperDrawbar[8] =      	map(rvalue2,  0,127,  0,  8); break;
+				case 91: reverb  =              	map(rvalue2,  0,127,  0, 64); break;
+				case 94: finetune  =         0.001 * map(rvalue2,  0,127, -50, 50); break;
 							}
 		break;	
 		case 2:
@@ -110,7 +111,7 @@ void electunoNoteOn(byte channel, byte rvalue1, byte rvalue2)
 			}
 		}
 
-		float noteFreq = (((6.05 * FREQTUNE))*pow(1.059463094359,(rvalue1)));
+		float noteFreq = ((((6.05+finetune) * FREQTUNE))*pow(1.059463094359,(rvalue1)));
 		//float noteFreq = (((6.05*(1 << FREQTUNE)))*pow(1.059463094359,(rvalue1)));
 		if (channel == 1)
 		{	

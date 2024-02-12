@@ -316,10 +316,10 @@ const uint16_t leslieTimerSize=(1<<LESLIEBUFFERSIZE) ;
 			
 			uint8_t lpfc = 0 ;	do
 			{	//	Add the entire buffer into a single sample to get lowpass sample
-				lowpassFilterSample += sampleBuffer[sampleStep - lpfc & eqsbs] >> 4 ;
+				lowpassFilterSample += sampleBuffer[sampleStep - lpfc & eqsbs];
 				lpfc++ ;
 			} while ( lpfc < eqsbs );
-				
+			lowpassFilterSample >>= 4 ;
 			int16_t hipassFilterSample = sampleBuffer[sampleStep - 1 & eqsbs] ;//	Gets the last sample in the buffer to subtract from the current sample
 
 			int16_t lowfreqSample = lowpassFilterSample + (( mainOut * ( 16 - leslieLowpassFilter )) >>5 ) ; //	Gets the processed low frequency sample
@@ -348,30 +348,35 @@ const uint16_t leslieTimerSize=(1<<LESLIEBUFFERSIZE) ;
 				(
 					leslieDrumBuffer[lc + lfc + drumChorus1 & leslieBufferSize] +
 					leslieDrumBuffer[lc - lfc - drumChorus2 & leslieBufferSize] 
-				) >> 5
+				)
 			;
 			hornPhaseSample +=
 				(
 					leslieHornBuffer[lc + lfc + hornChorus1 & leslieBufferSize] +
 					leslieHornBuffer[lc - lfc - hornChorus2 & leslieBufferSize]
-				) >> 5
+				)
 			; 
 			drumOut +=
 				(
 			 		leslieDrumBuffer[lc - lfc - drumChorus1 & leslieBufferSize] +
 					leslieDrumBuffer[lc + lfc + drumChorus2 & leslieBufferSize]
-				) >> 4
+				)
 			;
 			hornOut +=
 				(
 			 		leslieHornBuffer[lc - lfc - hornChorus1 & leslieBufferSize] +
 					leslieHornBuffer[lc + lfc + hornChorus2 & leslieBufferSize]
-				) >> 4
+				)
 			;
 			lfc++ ;
 			} while ( lfc < 8 ) ;	//	Applied 8 times to reduce noise
 
 			//	Generate the output and apply the volume to each part
+			drumPhaseSample >>= 4;
+			hornPhaseSample >>= 4;
+			drumOut >>= 3;
+			hornOut >>= 3;
+
 
 			drumOut-= ( drumPhaseSample * leslieDrumPhase ) >> 4 ;
 			hornOut+= ( hornPhaseSample * leslieHornPhase ) >> 4 ;

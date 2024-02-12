@@ -47,7 +47,7 @@ Problems:
 
 //	Tone generator variables
 
-	float finetune	= 1;
+	float finetune;
 	uint8_t  noteChannel[POLYPHONY];
 	uint8_t freeChannel = 0;
 	uint16_t channelFreq[POLYPHONY];
@@ -128,7 +128,7 @@ Problems:
 
 	//	Tone generator variables
 
-	float finetune	= 1;
+	float finetune;
 	uint8_t  noteChannel[POLYPHONY];
 	uint8_t freeChannel = 0;
 	uint16_t channelFreq[POLYPHONY];
