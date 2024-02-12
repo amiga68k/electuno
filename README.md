@@ -193,7 +193,6 @@ Sets the buffer size for the chorus effect, in bits.
 **Default MIDI configuration**
 
 **Channel 1 (Upper & effects control):**
--  1   Reverb
 -  3   Upper volume
 -  11  Expression
 -  50  Lower vibrato switch
@@ -228,6 +227,7 @@ Sets the buffer size for the chorus effect, in bits.
 -  76  Drawbar 1'3/5
 -  77  Drawbar 1'1/3
 -  78  Drawbar 1'
+-  91  Reverb
 
 **Channel 3 (Pedals):**
 -  3   Pedal volume
