@@ -1,4 +1,4 @@
-# Electuno 0.1.2. Vintage organ simulator
+# Electuno 0.1.3. Vintage organ simulator
 
 AUTHOR: Israel Reyes Rodríguez (isRasta)
 MAIL: amiga68k@gmail.com
@@ -248,8 +248,6 @@ Sets the buffer size for the chorus effect, in bits.
 **Schematics**
 
 R4 and C1 must be adjusted to achieve a suitable sound filter according to the output frequency.
-
-For this I have seen the following website: https://www.learningaboutelectronics.com/Articles/Low-pass-filter-calculator.php
 
 
 Arduino Nano Scheme
