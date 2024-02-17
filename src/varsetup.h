@@ -1,8 +1,8 @@
 /*
 File "varsetup.h"
 Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
-Version 0.12
-Copyright 2019-2023 Israel Reyes Rodríguez.
+Version 0.13
+Copyright 2019-2024 Israel Reyes Rodríguez (amiga68k@gmail.com).
 
 This file is part of Electuno organ simulator library.
 Electuno is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.

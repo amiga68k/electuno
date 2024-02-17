@@ -1,4 +1,8 @@
 # Electuno 0.1.2. Vintage organ simulator
+
+AUTHOR: Israel Reyes Rodríguez (isRasta)
+MAIL: amiga68k@gmail.com
+
 This library attempts to simulate a Hammond B3 organ and a Leslie speaker with two cabinets (Drum & horn).
 Unlike other organ simulators, the tones are generated from a sinus wave calculated at the start of the performance.
 The code only uses integers except in the calculation of the musical note. This is so that it works on CPUs without a floating point unit.
