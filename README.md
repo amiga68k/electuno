@@ -1,7 +1,8 @@
-# Electuno 0.1.3. Vintage organ simulator
+# Electuno 0.1.4. Vintage organ simulator
 
-AUTHOR: Israel Reyes Rodríguez (isRasta)
-MAIL: amiga68k@gmail.com
+Author: Israel Reyes Rodríguez (isRasta)
+
+Contact: amiga68k@gmail.com
 
 This library attempts to simulate a Hammond B3 organ and a Leslie speaker with two cabinets (Drum & horn).
 Unlike other organ simulators, the tones are generated from a sinus wave calculated at the start of the performance.
@@ -11,7 +12,17 @@ You can hear it in the sample video.
 
 Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
 
+**Bug & problems**
 
+Unwanted distortion when all drawbars are open and the expression pedal is maxed out. (A temporary solution is to change OUTBITSHIFT 3 to 4)
+
+The scanner vibrato effect introduces some distortion.
+
+The rotary effect code generates a lot of noise, especially in the high-pass filter; I have tried raising the output frequency to 32Khz but it doesn't improve anything. I have to find a way to create a filter as fast as the current one but with less loss of quality. At the moment I don't have a solution for this, but it improves a lot if we don't use the high-pass filter at its maximum value. It is also quite disguised by adding a physical low-pass filter by adding a suitable capacitor between the sound output and the ground signal.
+
+There are more problems, but I hope I can solve them.
+
+Any suggestion or help is appreciated.
 
 **Requirements:**
 
@@ -29,15 +40,9 @@ ESP8266 and ESP32 also working (See example files).
 
 
 **Changes in this version:**
--  Fixed problem in accelerating the Leslie speaker simulation.
--  Added more MIDI controls (See list in this document below).
--  Added pedal keyboard.
--  Added independent volume controls for each keyboard.
--  Added support for expression pedal.
--  Added phase modulation for Leslie speaker code.
--  Added new LOWRAM method designed for Atmel328P and similar.
--  Added Arduino Due example test code.
--  Added ESP32 WROOM 32 example test code.
+
+-  Added MIDI control for pseudorealtime tuning.
+-  Update example code for MCP_DAC library compatibility.
 
 
 Specifications:
@@ -219,6 +224,7 @@ Sets the buffer size for the chorus effect, in bits.
 -  76  Drawbar 1'3/5
 -  77  Drawbar 1'1/3
 -  78  Drawbar 1'
+-  94  Tune frequency (No realtime, only change on new played keys)
 
 **Channel 2 (Lower):**
 -  3   Lower volume

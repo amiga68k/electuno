@@ -11,6 +11,7 @@ MAIL: amiga68k@gmail.com
 ///////////////////////
 */
 
+#define OUTBITSHIFT 3
 #define WAVEMIXMODE 1
 #define FREQTUNE 2.125
 #define VOLUMECONTROL 0
@@ -113,7 +114,7 @@ void setup() {
 }
 void ICACHE_RAM_ATTR onTimerISR()
 { 
-  MCP.fastWriteA(( OrganOutput() >> 3 ) + 2047 ) ;
+  MCP.fastWriteA(( OrganOutput() >> OUTBITSHIFT ) + 2047 ) ;
 }
 void Esp8266TimerSetup()
 {    

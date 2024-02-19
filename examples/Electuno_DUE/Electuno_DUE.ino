@@ -14,6 +14,7 @@ AUDIO    -> DAC0 Pin
 ///////////////////////
 */
 
+#define OUTBITSHIFT 3
 #define WAVEMIXMODE 1
 #define FREQTUNE 2.125
 #define VOLUMECONTROL 0
@@ -141,5 +142,5 @@ void loop()
 
 void OutputTimer()
 {
-  analogWrite(DAC0, ( OrganOutput() >> 3 ) + 2048 ) ;
+  analogWrite(DAC0, ( OrganOutput() >> OUTBITSHIFT ) + 2048 ) ;
 }

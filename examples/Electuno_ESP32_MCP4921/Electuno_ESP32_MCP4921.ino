@@ -10,7 +10,7 @@ MAIL: amiga68k@gmail.com
 //Compilation options//
 ///////////////////////
 */
-
+#define OUTBITSHIFT 3
 #define WAVEMIXMODE 1
 #define FREQTUNE 2
 #define VOLUMECONTROL 0
@@ -112,7 +112,7 @@ void setup() {
 
 void ICACHE_RAM_ATTR onTimer() //  ICACHE_RAM_ATTR onTimerISR()
 { 
-   MCP.fastWriteA(( OrganOutput() >> 3 ) + 2047 ) ;
+   MCP.fastWriteA(( OrganOutput() >> OUTBITSHIFT ) + 2047 ) ;
 }
 
 hw_timer_t *My_timer = NULL;

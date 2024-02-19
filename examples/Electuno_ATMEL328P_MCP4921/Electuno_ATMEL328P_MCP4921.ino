@@ -10,7 +10,7 @@ MAIL: amiga68k@gmail.com
 //Compilation options//
 ///////////////////////
 */
-
+#define OUTBITSHIFT 3
 #define LOWRAM
 #define WAVEMIXMODE 1
 #define FREQTUNE 4
@@ -124,5 +124,5 @@ void loop()
 
 ISR(TIMER1_OVF_vect) 
 {
-  myDac(( OrganOutput() << 3 ) + 2047 ) ;
+  myDac(( OrganOutput() << OUTBITSHIFT ) + 2047 ) ;
 }

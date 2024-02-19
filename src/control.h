@@ -61,7 +61,7 @@ void electunoControlChange(byte channel, byte rvalue1, byte rvalue2)
 				case 77: upperDrawbar[7] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 78: upperDrawbar[8] =      	map(rvalue2,  0,127,  0,  8); break;
 				case 91: reverb  =              	map(rvalue2,  0,127,  0, 64); break;
-				case 94: finetune  =         0.001 * map(rvalue2,  0,127, -50, 50); break;
+				case 94: finetune  =         0.005 * map(rvalue2,  0,127, -50, 50); break;
 							}
 		break;	
 		case 2:
