@@ -1,5 +1,5 @@
 /*
-Electuno for Arduino Due at 21Khz
+Electuno v0.1.3 for Arduino Due at 21Khz
 
 FILE: Electuno_DUE.ino
 AUTHOR: Israel Reyes Rodríguez (isRasta)
