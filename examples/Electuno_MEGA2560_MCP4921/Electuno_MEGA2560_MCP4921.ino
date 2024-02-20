@@ -1,5 +1,5 @@
 /*
-Electuno for Arduino MEGA at 11025HZ
+Electuno v0.1.3 for Arduino MEGA at 11025HZ
 
 FILE: Electuno_MEGA2560_MCP4921.ino
 AUTHOR: Israel Reyes Rodríguez (isRasta)
