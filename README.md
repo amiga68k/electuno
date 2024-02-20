@@ -45,11 +45,11 @@ ESP8266 and ESP32 also working (See example files).
 -  Update example code for MCP_DAC library compatibility.
 
 
-Specifications:
+**Specifications:**
 - Sound output through DAC MCP4921 (It is possible to operate it through PWM or other DACs).
 - Controllable via MIDI (You need the MIDI library from the Arduino repositories).
 - Fully modular to be able to disable functions on low-power CPUs.
-- Simulates two independent keyboards (upper & lower) with nine drawbars each.
+- Simulates two independent keyboards and pedal, with nine drawbars each.
 - Foldback effect on last 2 octaves.
 - Percussion effect on the upper keyboard.
 - Independent vibrato chorus scanner effect for each keyboard.
@@ -194,10 +194,7 @@ Sets the buffer size for the chorus effect, in bits.
   ATTENTION: The size of the buffer for this effect directly affects the tuning of the rotary effect.
   Avaiable options:
  - 7 = 7 bit rotary effect buffer. -Default-
-
-
-
-
+ - 
 
 **Default MIDI configuration**
 
