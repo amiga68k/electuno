@@ -1,5 +1,9 @@
 /*
 File "overdrive.h"
+Author: Israel Reyes Rodríguez (isRasta)
+Url: https://github.com/amiga68k/electuno
+Mail: amiga68k@gmail.com
+
 Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
 Version 0.13
 Copyright 2019-2024 Israel Reyes Rodríguez (amiga68k@gmail.com).
