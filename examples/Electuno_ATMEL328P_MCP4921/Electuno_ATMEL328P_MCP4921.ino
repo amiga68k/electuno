@@ -1,5 +1,5 @@
 /*
-Electuno for Arduino NANO/UNO/MEGA. 11025HZ
+Electuno v0.1.3 for Arduino NANO/UNO/MEGA. 11025HZ
 
 FILE: Electuno_ATMEL328P_MCP4921.ino
 AUTHOR: Israel Reyes Rodríguez (isRasta)
