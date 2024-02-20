@@ -1,5 +1,5 @@
 /*
-Electuno for ESP32 at 22Khz
+Electuno v0.1.3 for ESP32 at 22Khz
 
 FILE: Electuno_ESP32_MCP4921.ino
 AUTHOR: Israel Reyes Rodríguez (isRasta)
