@@ -1,7 +1,11 @@
 /*
 File "chorus.h"
+Author: Israel Reyes Rodríguez (isRasta)
+Url: https://github.com/amiga68k/electuno
+Mail: amiga68k@gmail.com
+
 Electuno Organ Simulator library (based on Lo-Fi Tonewheel).
-Version 0.13
+Version 0.1.3
 Copyright 2019-2023 Israel Reyes Rodríguez (amiga68k@gmail.com).
 
 This file is part of Electuno organ simulator library.
