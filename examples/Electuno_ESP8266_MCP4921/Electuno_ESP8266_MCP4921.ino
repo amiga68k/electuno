@@ -1,5 +1,5 @@
 /*
-Electuno for ESP8266 at 21Khz
+Electuno v0.1.3 for ESP8266 at 21Khz
 
 FILE: Electuno_ESP8266_MCP4921.ino
 AUTHOR: Israel Reyes Rodríguez (isRasta)
