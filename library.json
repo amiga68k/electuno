@@ -1,6 +1,6 @@
 {
     "name": "Electuno_Library",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "keywords": "midi,synth,hammond,organ,electone",
     "description": "Simulates vintage organ sound",
     "license": "GPL",
