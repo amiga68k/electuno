@@ -68,8 +68,11 @@ In this mode the polyphony is limited to 8, and it is only capable of simulating
 **ESP8266 and ESP32 notes**
 
 First you must install support for this MCU in Arduino IDE:
+
 ESP8266: https://www.google.com/search?q=esp8266+on+arduino+ide
+
 ESP32: https://www.google.com/search?q=esp32+on+arduino+ide
+
 Once support for your board is installed, you must install this library from the Arduino library manager;
 Just search for 'electuno' and the available versions will appear.
 Inside Arduino IDE, go to the menu 'file->examples->electuno->ESP8266xxxxxx'.
