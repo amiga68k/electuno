@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License along with Foo
 
 File notes:
 	New code for test.
-	Fix some variables to working with Arduino Due
+	Fix some variables to working with Arduino Due	
 Problems:
 	
 */
@@ -41,7 +41,7 @@ void Reverb()
 		reverbStep = 0 ;
 	}
 	
-	reverbBuffer[reverbStep] = mainOut + ( reverbOut >>2 );
+	reverbBuffer[reverbStep] = mainOut + ( reverbOut >>1 ) >> 1;
 
 	reverbOut = 0;
 
@@ -53,6 +53,7 @@ void Reverb()
 		rlc ++ ;
 	} while ( rlc < 4 ) ;
 
-	mainOut += (( reverbOut * reverb ) >> 7 );
+	// mainOut += (( reverbOut * reverb ) >> 7 );
+	mainOut = (( mainOut * (127-reverb) ) >> 7 ) + (( reverbOut * reverb ) >> 7 );
   
 }
