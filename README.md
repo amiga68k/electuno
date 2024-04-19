@@ -12,6 +12,8 @@ You can hear it in the sample video.
 
 Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
 
+Jammond (Electuno inside) demo video:https://youtu.be/EwPbPl_iizA?si=TqNFOTpDPPFFmA4X
+
 **Bug & problems**
 
 Unwanted distortion when all drawbars are open and the expression pedal is maxed out. (A temporary solution is to change OUTBITSHIFT 3 to 4)
