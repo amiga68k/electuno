@@ -200,10 +200,10 @@ Sets the buffer size for the chorus effect, in bits.
 **LESLIEBUFFERSIZE**
 
   Sets the buffer size for the rotary effect, in bits.
-  ATTENTION: The size of the buffer for this effect directly affects the tuning of the rotary effect.
+  ATTENTION: The size of the buffer for this effect directly affects the tuning pitch and filters of the rotary effect.
   Avaiable options:
  - 7 = 7 bit rotary effect buffer. -Default-
- - 
+ - Only tested ...7,8,9,10,11. For more than 11 bits, a more powerful CPU is needed.
 
 **Default MIDI configuration**
 
