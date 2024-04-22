@@ -10,6 +10,10 @@ The code only uses integers except in the calculation of the musical note. This 
 Electuno has a lot of glitches and unwanted noise, but by using some capacitors and resistors at the output of the DAC, it can sound similar to a Hammond organ. 
 You can hear it in the sample video.
 
+I will try to make all my work open source; If someone wants to motivate me to continue making inventions, they can help me in many ways: Giving me a like,
+sharing these projects, helping with programming, improving electronic schematics, or with a subscription to my patreon; There is free and there is also payment:
+https://www.patreon.com/isRasta
+
 Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
 
 Jammond (Electuno inside) demo video:https://youtu.be/EwPbPl_iizA?si=TqNFOTpDPPFFmA4X
