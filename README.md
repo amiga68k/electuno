@@ -230,6 +230,7 @@ Sets the buffer size for the chorus effect, in bits.
 -  76  Drawbar 1'3/5
 -  77  Drawbar 1'1/3
 -  78  Drawbar 1'
+-  91  Reverb control
 -  94  Tune frequency (No realtime, only change on new played keys)
 
 **Channel 2 (Lower):**
