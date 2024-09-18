@@ -79,9 +79,9 @@ void MySettings()
   leslieHornVibrato = 10;
   leslieLowpassFilter = 16 ;
   leslieHipassFilter = 14 ; 
-  leslieDrumPhase = 10 ; 
-  leslieHornPhase = 16; 
-  leslieDrumMicVolume = 16 ; 
+  leslieDrumPhase = 6 ; 
+  leslieHornPhase = 8; 
+  leslieDrumMicVolume = 10 ; 
   leslieHornMicVolume = 16; 
 
 ///////////////////////////
