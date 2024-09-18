@@ -10,7 +10,13 @@ The code only uses integers except in the calculation of the musical note. This 
 Electuno has a lot of glitches and unwanted noise, but by using some capacitors and resistors at the output of the DAC, it can sound similar to a Hammond organ. 
 You can hear it in the sample video.
 
+I will try to make all my work open source; If someone wants to motivate me to continue making inventions, they can help me in many ways: Giving me a like,
+sharing these projects, helping with programming, improving electronic schematics, or with a subscription to my patreon; There is free and there is also payment:
+https://www.patreon.com/isRasta
+
 Demo video: https://youtu.be/f7KLLlDKEW8?si=Gs59R1dpGhj4l2iC
+
+Jammond (Electuno inside) demo video:https://youtu.be/EwPbPl_iizA?si=TqNFOTpDPPFFmA4X
 
 **Bug & problems**
 
@@ -194,10 +200,10 @@ Sets the buffer size for the chorus effect, in bits.
 **LESLIEBUFFERSIZE**
 
   Sets the buffer size for the rotary effect, in bits.
-  ATTENTION: The size of the buffer for this effect directly affects the tuning of the rotary effect.
+  ATTENTION: The size of the buffer for this effect directly affects the tuning pitch and filters of the rotary effect.
   Avaiable options:
  - 7 = 7 bit rotary effect buffer. -Default-
- - 
+ - Only tested ...7,8,9,10,11. For more than 11 bits, a more powerful CPU is needed.
 
 **Default MIDI configuration**
 
@@ -224,6 +230,7 @@ Sets the buffer size for the chorus effect, in bits.
 -  76  Drawbar 1'3/5
 -  77  Drawbar 1'1/3
 -  78  Drawbar 1'
+-  91  Reverb control
 -  94  Tune frequency (No realtime, only change on new played keys)
 
 **Channel 2 (Lower):**
