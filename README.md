@@ -1,4 +1,4 @@
-# Electuno 0.1.3. Vintage organ simulator
+# Electuno 0.1.3.1 Vintage organ simulator
 
 Author: Israel Reyes Rodríguez (isRasta)
 
