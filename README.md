@@ -47,6 +47,7 @@ ESP8266 and ESP32 also working (See example files).
 
 **Changes in this version:**
 
+-  (0.1.3.1) Fix Leslie simulator phase effect.
 -  Added MIDI control for pseudorealtime tuning.
 -  Update example code for MCP_DAC library compatibility.
 
